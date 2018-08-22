@@ -32,7 +32,7 @@ public final class GameFusionEngine
 	private GameFusionEngine() {}
 	
 	public static void prepareToStart()
-	{	
+	{		
 		display = new Display()
 		{
 			private static final long serialVersionUID = 6209237097299496909L;
@@ -110,7 +110,7 @@ public final class GameFusionEngine
 	
 	public static void changeLevel(String levelName, boolean stopSounds, boolean removeFrameImage)
 	{
-		addToQueue(new Thread(() -> changeLevel0(levelName, stopSounds, removeFrameImage)));
+		addToQueue(() -> changeLevel0(levelName, stopSounds, removeFrameImage));
 	}
 	
 	private static void changeLevel0(String levelName, boolean stopSounds, boolean removeFrameImage)
