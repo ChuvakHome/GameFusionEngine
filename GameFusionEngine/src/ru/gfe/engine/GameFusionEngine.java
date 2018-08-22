@@ -1,0 +1,293 @@
+package ru.gfe.engine;
+
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import ru.gfe.display.Display;
+import ru.gfe.handler.EngineHandler;
+import ru.gfe.handler.KeyHandler;
+import ru.gfe.handler.MouseHandler;
+import ru.gfe.handler.SoundHandler;
+
+public final class GameFusionEngine 
+{
+	public static final int QUEUE_SIZE = 250;
+	
+	private static Display display;
+	private static EngineHandler engineHandler;
+	private static Level currentLevel;
+	private static Timer timer;
+	private static KeyHandler keyHandler;
+	private static MouseHandler mouseHandler;
+	private static long timeOnLevel;
+	private static boolean started;
+	private static Image image;
+	private static int imageX, imageY;
+	private static Thread[] queue;
+	private static int freeIndex;
+	private static final Object LOCK = new Object();
+	
+	private GameFusionEngine() {}
+	
+	public static void prepareToStart()
+	{
+		queue = new Thread[QUEUE_SIZE];
+		
+		display = new Display()
+		{
+			private static final long serialVersionUID = 6209237097299496909L;
+			
+			public void paint(Graphics g)
+			{
+				super.paint(g);
+				
+				g.drawImage(image, imageX, imageY, null);
+			}
+		};
+	}
+	
+	public static void addToQueue(Thread thread)
+	{
+		synchronized (LOCK)
+		{
+			if (thread != null)
+			{
+				if (freeIndex < QUEUE_SIZE)
+					queue[freeIndex++] = thread;
+				else
+					throw new IllegalStateException("Queue full");
+			}
+		}
+	}
+	
+	public static void addToQueue(Runnable runnable)
+	{
+		addToQueue(new Thread(runnable));
+	}
+	
+	public static Level getLevel()
+	{
+		return currentLevel;
+	}
+	
+	public static void setKeyHandler(KeyHandler handler)
+	{
+		keyHandler = handler;
+	}
+	
+	public static void setMouseHandler(MouseHandler handler)
+	{
+		mouseHandler = handler;
+	}
+	
+	public static void processKeyEvent(KeyEvent e)
+	{
+		if (keyHandler != null)
+			keyHandler.processKeyEvent(e);
+	}
+	
+	public static void processMouseEvent(MouseEvent e)
+	{
+		if (mouseHandler != null)
+			mouseHandler.processMouseEvent(e);
+	}
+	
+	public static void processMouseMotionEvent(MouseEvent e)
+	{
+		if (mouseHandler != null)
+			mouseHandler.processMouseMotionEvent(e);
+	}
+	
+	public static void processMouseWheelEvent(MouseWheelEvent e)
+	{
+		if (mouseHandler != null)
+			mouseHandler.processMouseWheelEvent(e);
+	}
+	
+	public static void addLevel(String levelName, Class<? extends Level> levelClass, Object... initargs)
+	{
+		LevelCollection.add(levelName, levelClass, initargs);
+	}
+	
+	public static void changeLevel(String levelName)
+	{
+		changeLevel(levelName, true);
+	}
+	
+	public static void changeLevel(String levelName, boolean stopSounds)
+	{
+		changeLevel(levelName, stopSounds, true);
+	}
+	
+	public static void changeLevel(String levelName, boolean stopSounds, boolean removeFrameImage)
+	{
+		addToQueue(new Thread(() -> changeLevel0(levelName, stopSounds, removeFrameImage)));
+	}
+	
+	private static void changeLevel0(String levelName, boolean stopSounds, boolean removeFrameImage)
+	{
+		Level level = LevelCollection.getLevelByName(levelName);
+		
+		if (level != null && level.getLevelContainer() != null && (currentLevel != null || !level.equals(currentLevel)))
+		{
+			if (stopSounds)
+				SoundHandler.stopAll();
+			
+			currentLevel.destroy();
+			currentLevel = level;
+			
+			if (removeFrameImage)
+				removeFrameImage();
+			
+			display.setVisible(false);
+			
+			currentLevel.init();	
+			display.setContentPane(currentLevel.levelContainer);
+			currentLevel.postInit();
+			
+			display.setVisible(true);
+			
+			timeOnLevel = 0;
+		}
+	}
+	
+	public static void exit()
+	{
+		if (started)
+		{
+			if (engineHandler != null)
+				engineHandler.exit();
+			else
+				System.exit(0);
+		}
+	}
+	
+	public static boolean isStarted()
+	{
+		return started;
+	}
+	
+	public static void setFrameImage(Image img, int posX, int posY)
+	{
+		image = img;
+		imageX = posX;
+		imageY = posY;
+		display.repaint();
+	}
+	
+	public static void setFrameImage(Image img)
+	{
+		setFrameImage(img, 0, 0);
+	}
+	
+	public static void removeFrameImage()
+	{
+		image = null;
+		display.repaint();
+	}
+	
+	public static Image getFrameImage()
+	{
+		return image;
+	}
+	
+	public static int getImageX()
+	{
+		return imageX;
+	}
+	
+	public static int getImageY()
+	{
+		return imageY;
+	}
+	
+	public static void setPrimaryLevel(String name)
+	{
+		if (currentLevel == null)
+			currentLevel = LevelCollection.getLevelByName(name);
+	}
+	
+	public static void setEngineHandler(EngineHandler handler)
+	{
+		engineHandler = handler;
+	}
+	
+	public static void launch()
+	{
+		prepareToStart();
+		
+		display.setSize(640, 480);
+		display.setLocationRelativeTo(null);
+		
+		if (currentLevel != null)
+		{
+			currentLevel.init();
+			display.setContentPane(currentLevel.getLevelContainer());
+			currentLevel.postInit();
+		}
+		
+		display.setVisible(true);
+		
+		started = true;
+		
+		timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask()
+		{
+			public void run() 
+			{
+				if (!display.canClose())
+				{
+					++timeOnLevel;
+					
+					if (engineHandler != null)
+						engineHandler.update();
+					
+					if (currentLevel != null) 
+						currentLevel.update();
+					
+					processQueue();
+				}
+				else
+				{
+					if (engineHandler != null)
+						engineHandler.exit();
+					else
+						System.exit(0);
+				}
+			}
+		}, 0, 1);
+	}
+	
+	private static void processQueue()
+	{
+		if (freeIndex > 0)
+		{
+			for (int i = 0; i < freeIndex; ++i)
+				queue[i].start();
+			
+			queue = new Thread[QUEUE_SIZE];
+			
+			freeIndex = 0;
+		}
+	}
+	
+	public static long getTimeOnLevel()
+	{
+		return timeOnLevel;
+	}
+	
+	public static Display getDisplay()
+	{
+		return display;
+	}
+	
+	public static String getLevelName()
+	{
+		return currentLevel.levelName;
+	}
+}
