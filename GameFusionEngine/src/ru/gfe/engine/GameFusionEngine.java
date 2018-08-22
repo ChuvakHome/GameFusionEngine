@@ -161,7 +161,10 @@ public final class GameFusionEngine
 		if (started)
 		{
 			if (engineHandler != null)
+			{
+				timer.cancel();
 				engineHandler.exit();
+			}
 			else
 				System.exit(0);
 		}
@@ -253,12 +256,7 @@ public final class GameFusionEngine
 					processQueue();
 				}
 				else
-				{
-					if (engineHandler != null)
-						engineHandler.exit();
-					else
-						System.exit(0);
-				}
+					exit();
 			}
 		}, 0, 1);
 	}
