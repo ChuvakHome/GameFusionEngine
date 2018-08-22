@@ -185,7 +185,7 @@ public class Sequence extends JLabel
   					imgs.add(new ImageIcon(f.getPath()).getImage());
   			}
   			
-  			return (Image[])imgs.toArray(new Image[0]);
+  			return (Image[]) imgs.toArray(new Image[0]);
   		}
     
   		return null;
