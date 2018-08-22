@@ -1,5 +1,6 @@
 package ru.gfe.engine;
 
+import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -16,8 +17,6 @@ import ru.gfe.handler.SoundHandler;
 
 public final class GameFusionEngine 
 {
-	public static final int QUEUE_SIZE = 250;
-	
 	private static Display display;
 	private static EngineHandler engineHandler;
 	private static Level currentLevel;
@@ -28,16 +27,12 @@ public final class GameFusionEngine
 	private static boolean started;
 	private static Image image;
 	private static int imageX, imageY;
-	private static Thread[] queue;
-	private static int freeIndex;
 	private static final Object LOCK = new Object();
 	
 	private GameFusionEngine() {}
 	
 	public static void prepareToStart()
-	{
-		queue = new Thread[QUEUE_SIZE];
-		
+	{	
 		display = new Display()
 		{
 			private static final long serialVersionUID = 6209237097299496909L;
@@ -55,13 +50,7 @@ public final class GameFusionEngine
 	{
 		synchronized (LOCK)
 		{
-			if (thread != null)
-			{
-				if (freeIndex < QUEUE_SIZE)
-					queue[freeIndex++] = thread;
-				else
-					throw new IllegalStateException("Queue full");
-			}
+			EventQueue.invokeLater(thread);
 		}
 	}
 	
@@ -252,26 +241,11 @@ public final class GameFusionEngine
 					
 					if (currentLevel != null) 
 						currentLevel.update();
-					
-					processQueue();
 				}
 				else
 					exit();
 			}
 		}, 0, 1);
-	}
-	
-	private static void processQueue()
-	{
-		if (freeIndex > 0)
-		{
-			for (int i = 0; i < freeIndex; ++i)
-				queue[i].start();
-			
-			queue = new Thread[QUEUE_SIZE];
-			
-			freeIndex = 0;
-		}
 	}
 	
 	public static long getTimeOnLevel()
