@@ -8,9 +8,11 @@ import java.util.List;
 import javafx.scene.media.AudioClip;
 import ru.gfe.engine.GameFusionEngine;
 
-public class SoundHandler 
+public final class SoundHandler 
 {	
 	private static List<AudioClip> audioClips = new ArrayList<AudioClip>();
+	
+	private SoundHandler() {}
 	
 	public static void play(URL url)
 	{

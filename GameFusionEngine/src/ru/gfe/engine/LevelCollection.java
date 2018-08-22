@@ -4,8 +4,10 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LevelCollection 
+public final class LevelCollection 
 {
+	private LevelCollection() {}
+	
 	private static class LevelBuilder
 	{
 		private Class<? extends Level> levelClass;

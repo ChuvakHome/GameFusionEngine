@@ -14,12 +14,14 @@ import ru.gfe.handler.ResourceHandler;
 public class Sequence extends JLabel
 {
 	private static final long serialVersionUID = 8918754447101183453L;
+	
 	public static final int LOOP_CONTINUOUSLY = -1;
+	
 	private Image[] frames;
 	private int index = 0;
 	private int loop = 1;
 	private boolean end;
-	private long delay = 40L;
+	private long delay = 40;
 	private Timer timer;
   
 	public Sequence(String directory)
@@ -164,11 +166,11 @@ public class Sequence extends JLabel
 			else
 			{
 				end = true;
-				return frames[(frames.length - 1)];
+				return frames[frames.length - 1];
 			}
 		}
     
-		return frames[(index++)];
+		return frames[index++];
 	}
   
   	private static Image[] getImages(File directory)
