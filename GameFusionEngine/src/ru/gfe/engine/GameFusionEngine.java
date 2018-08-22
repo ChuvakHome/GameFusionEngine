@@ -46,17 +46,12 @@ public final class GameFusionEngine
 		};
 	}
 	
-	public static void addToQueue(Thread thread)
+	public static void addToQueue(Runnable runnable)
 	{
 		synchronized (LOCK)
 		{
-			EventQueue.invokeLater(thread);
+			EventQueue.invokeLater(runnable);
 		}
-	}
-	
-	public static void addToQueue(Runnable runnable)
-	{
-		addToQueue(new Thread(runnable));
 	}
 	
 	public static Level getLevel()
