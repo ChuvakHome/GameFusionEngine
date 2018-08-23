@@ -27,7 +27,6 @@ public final class GameFusionEngine
 	private static boolean started;
 	private static Image image;
 	private static int imageX, imageY;
-	private static final Object LOCK = new Object();
 	
 	private GameFusionEngine() {}
 	
@@ -44,14 +43,6 @@ public final class GameFusionEngine
 				g.drawImage(image, imageX, imageY, null);
 			}
 		};
-	}
-	
-	public static void addToQueue(Runnable runnable)
-	{
-		synchronized (LOCK)
-		{
-			EventQueue.invokeLater(runnable);
-		}
 	}
 	
 	public static Level getLevel()
@@ -110,7 +101,7 @@ public final class GameFusionEngine
 	
 	public static void changeLevel(String levelName, boolean stopSounds, boolean removeFrameImage)
 	{
-		addToQueue(() -> changeLevel0(levelName, stopSounds, removeFrameImage));
+		EventQueue.invokeLater(() -> changeLevel0(levelName, stopSounds, removeFrameImage));
 	}
 	
 	private static void changeLevel0(String levelName, boolean stopSounds, boolean removeFrameImage)

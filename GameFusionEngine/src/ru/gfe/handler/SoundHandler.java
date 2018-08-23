@@ -1,5 +1,6 @@
 package ru.gfe.handler;
 
+import java.awt.EventQueue;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public final class SoundHandler
 	
 	public static void play(URI uri, double volume, int loop)
 	{
-		GameFusionEngine.addToQueue(new Thread(() ->
+		EventQueue.invokeLater(() ->
 		{
 			try
 			{
@@ -73,7 +74,7 @@ public final class SoundHandler
 				}
 			}
 			catch (Exception e) {e.printStackTrace();}
-		}));
+		});
 	}
 	
 	public static void playAndLoop(URL url)
@@ -112,7 +113,7 @@ public final class SoundHandler
 	
 	public static void stop(URI uri)
 	{
-		GameFusionEngine.addToQueue(() ->
+		EventQueue.invokeLater(() ->
 		{
 			if (uri != null)
 			{
@@ -135,7 +136,7 @@ public final class SoundHandler
 	
 	public static void stopAll()
 	{
-		GameFusionEngine.addToQueue(() ->
+		EventQueue.invokeLater(() ->
 		{
 			audioClips.forEach(clip -> clip.stop());
 			
