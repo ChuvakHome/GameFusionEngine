@@ -230,13 +230,16 @@ public final class GameFusionEngine
 			{
 				if (!display.canClose())
 				{
-					++timeOnLevel;
-					
-					if (engineHandler != null)
-						engineHandler.update();
-					
-					if (updateLevel && currentLevel != null) 
-						currentLevel.update();
+					if (updateLevel)
+					{	
+						++timeOnLevel;
+						
+						if (engineHandler != null)
+							engineHandler.update();
+						
+						if (currentLevel != null) 
+							currentLevel.update();
+					}
 				}
 				else
 					exit();
