@@ -41,9 +41,7 @@ public final class ResourceHandler
 		try
 		{
 			return new ImageIcon(url);
-		} catch (Exception e) { e.printStackTrace();}
-		
-		return null;
+		} catch (Exception e) {return null;}
 	}
 	
 	public static Image getImage(URL url)
@@ -51,9 +49,7 @@ public final class ResourceHandler
 		try
 		{
 			return ImageIO.read(url);
-		} catch (Exception e) { e.printStackTrace();}
-		
-		return null;
+		} catch (Exception e) {return null;}
 	}
 	
 	public static ImageIcon getImageIcon(Image image)
