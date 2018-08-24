@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.io.File;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public final class ResourceHandler
@@ -40,6 +41,16 @@ public final class ResourceHandler
 		try
 		{
 			return new ImageIcon(url);
+		} catch (Exception e) { e.printStackTrace();}
+		
+		return null;
+	}
+	
+	public static Image getImage(URL url)
+	{
+		try
+		{
+			return ImageIO.read(url);
 		} catch (Exception e) { e.printStackTrace();}
 		
 		return null;
