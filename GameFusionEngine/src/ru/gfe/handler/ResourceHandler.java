@@ -1,5 +1,6 @@
 package ru.gfe.handler;
 
+import java.awt.Image;
 import java.io.File;
 import java.net.URL;
 
@@ -42,5 +43,10 @@ public final class ResourceHandler
 		} catch (Exception e) { e.printStackTrace();}
 		
 		return null;
+	}
+	
+	public static ImageIcon getImageIcon(Image image)
+	{
+		return new ImageIcon(image);
 	}
 }
