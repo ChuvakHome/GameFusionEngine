@@ -18,15 +18,21 @@ import ru.gfe.handler.SoundHandler;
 public final class GameFusionEngine 
 {
 	private static Display display;
-	private static EngineHandler engineHandler;
-	private static Level currentLevel;
-	private static Timer timer;
-	private static KeyHandler keyHandler;
-	private static MouseHandler mouseHandler;
-	private static long timeOnLevel;
-	private static boolean started;
 	private static Image image;
+	
+	private static Timer timer;
+	
+	private static EngineHandler engineHandler;
+	private static KeyHandler keyHandler;
+	private static MouseHandler mouseHandler;	
+	
+	private static boolean started;
+	private static boolean updateLevel;
+	
 	private static int imageX, imageY;
+	private static long timeOnLevel;
+	
+	private static Level currentLevel;
 	
 	private GameFusionEngine() {}
 	
@@ -113,6 +119,7 @@ public final class GameFusionEngine
 			if (stopSounds)
 				SoundHandler.stopAll();
 			
+			updateLevel = false;
 			currentLevel.destroy();
 			currentLevel = level;
 			
@@ -126,6 +133,8 @@ public final class GameFusionEngine
 			currentLevel.postInit();
 			
 			display.setVisible(true);
+			
+			updateLevel = true;
 			
 			timeOnLevel = 0;
 		}
@@ -212,6 +221,7 @@ public final class GameFusionEngine
 		display.setVisible(true);
 		
 		started = true;
+		updateLevel = true;
 		
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask()
@@ -225,7 +235,7 @@ public final class GameFusionEngine
 					if (engineHandler != null)
 						engineHandler.update();
 					
-					if (currentLevel != null) 
+					if (updateLevel && currentLevel != null) 
 						currentLevel.update();
 				}
 				else
