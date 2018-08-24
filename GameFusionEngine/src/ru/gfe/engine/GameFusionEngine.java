@@ -114,7 +114,7 @@ public final class GameFusionEngine
 	{
 		Level level = LevelCollection.getLevelByName(levelName);
 		
-		if (level != null && level.getLevelContainer() != null && (currentLevel != null || !level.equals(currentLevel)))
+		if (level != null && level.levelContainer != null && (currentLevel != null || !level.equals(currentLevel)))
 		{
 			if (stopSounds)
 				SoundHandler.stopAll();

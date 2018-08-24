@@ -22,7 +22,7 @@ public final class LevelCollection
 	
 	private static Map<String, LevelBuilder> levels = new HashMap();
 	
-	public static <L extends Level> boolean add(String levelName, Class<L> levelClass, Object... constructorArgs)
+	static <L extends Level> boolean add(String levelName, Class<L> levelClass, Object... constructorArgs)
 	{
 		if (levels.containsKey(levelName))
 			return false;
@@ -34,7 +34,7 @@ public final class LevelCollection
 		}
 	}
 	
-	public static Level getLevelByName(String levelName)
+	static Level getLevelByName(String levelName)
 	{
 		if (levels.containsKey(levelName))
 		{	

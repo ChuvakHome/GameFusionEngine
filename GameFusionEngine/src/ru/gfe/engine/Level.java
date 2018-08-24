@@ -26,7 +26,7 @@ public class Level
 	protected void destroy() 
 	{
 		levelContainer.removeAll();
-		
+		levelContainer.setLayout(null);
 		levelContainer = null;
 		levelName = null;
 	}
