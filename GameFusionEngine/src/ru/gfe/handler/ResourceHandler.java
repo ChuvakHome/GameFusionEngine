@@ -38,10 +38,7 @@ public final class ResourceHandler
   
 	public static ImageIcon getImageIcon(URL url)
 	{
-		try
-		{
-			return new ImageIcon(url);
-		} catch (Exception e) {return null;}
+		return new ImageIcon(url);
 	}
 	
 	public static Image getImage(URL url)
