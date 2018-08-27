@@ -1,5 +1,6 @@
 package ru.gfe.engine;
 
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -93,6 +94,21 @@ public final class GameFusionEngine
 	public static void addLevel(String levelName, Class<? extends Level> levelClass, Object... initargs)
 	{
 		LevelCollection.add(levelName, levelClass, initargs);
+	}
+	
+	public static void setCursorAtDisplay(Cursor cursor)
+	{
+		display.setCursor(cursor);
+	}
+	
+	public static void setCursorAtDisplay(int cursorType)
+	{
+		display.setCursor(Cursor.getPredefinedCursor(cursorType));
+	}
+	
+	public static void resetCursourAtDisplay() 
+	{
+		display.setCursor(Cursor.getDefaultCursor());
 	}
 	
 	public static void changeLevel(String levelName)
