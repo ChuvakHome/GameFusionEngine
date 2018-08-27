@@ -106,7 +106,7 @@ public final class GameFusionEngine
 		display.setCursor(Cursor.getPredefinedCursor(cursorType));
 	}
 	
-	public static void resetCursourAtDisplay() 
+	public static void resetCursorAtDisplay() 
 	{
 		display.setCursor(Cursor.getDefaultCursor());
 	}
