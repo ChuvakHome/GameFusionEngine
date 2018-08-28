@@ -1,6 +1,9 @@
 package ru.gfe.engine;
 
 import java.awt.Container;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 
 public class Level 
 {
@@ -30,6 +33,14 @@ public class Level
 		levelContainer = null;
 		levelName = null;
 	}
+	
+	public void processKeyEvent(KeyEvent e) {}
+	
+	public void processMouseEvent(MouseEvent e) {}
+
+	public void processMouseMotionEvent(MouseEvent e) {}
+	
+	public void processMouseWheelEvent(MouseWheelEvent e) {}
 	
 	public final long getTimeOnLevel()
 	{
