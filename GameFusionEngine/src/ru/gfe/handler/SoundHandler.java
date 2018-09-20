@@ -65,11 +65,11 @@ public final class SoundHandler
 					AudioClip audioClip = new AudioClip(uri.toString());
 					
 					if (audioClip != null && audioClips != null)
-					{
-						audioClips.add(audioClip);
-							
+					{	
 						audioClip.setCycleCount(loop);
 						audioClip.play(volume);
+						
+						audioClips.add(audioClip);
 					}
 				}
 			}
@@ -119,13 +119,11 @@ public final class SoundHandler
 			{
 				try 
 				{	
-					AudioClip temp = new AudioClip(uri.toString());
-				
-					if (temp != null)
+					if (uri != null)
 					{
 						for (AudioClip audioClip: audioClips)
 						{
-							if (audioClip != null && audioClip.equals(temp))
+							if (audioClip != null && audioClip.getSource().equals(uri.toString()))
 								audioClip.stop();
 						}
 					}
