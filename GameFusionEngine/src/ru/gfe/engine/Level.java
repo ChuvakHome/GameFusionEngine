@@ -4,15 +4,27 @@ import java.awt.Container;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.ArrayList;
+
+import ru.gfe.entity.IEntity;
 
 public class Level 
 {
 	protected Container levelContainer = new Container();
 	protected String levelName;
 	
+	private ArrayList<IEntity> entityList = new ArrayList<IEntity>();
+	
 	public Container getLevelContainer()
 	{
 		return levelContainer;
+	}
+	
+	public int addEntity(IEntity ientity)
+	{
+		entityList.add(ientity);
+		
+		return (entityList.size() - 1) & ientity.getId();
 	}
 	
 	public String getLevelName()

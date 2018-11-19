@@ -61,6 +61,11 @@ public final class GameFusionEngine
 		keyHandler = handler;
 	}
 	
+	public static<E extends Event> void processEvent(E e)
+	{
+		engineHandler.processEvent(e);
+	}
+	
 	public static void setMouseHandler(MouseHandler handler)
 	{
 		mouseHandler = handler;
