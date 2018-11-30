@@ -14,8 +14,11 @@ public class Display extends JFrame
 	private static final long serialVersionUID = -8296410480257618092L;
 	private boolean fullScreen;
 	private boolean close;
-	  
-	public Display() {}
+	
+	public Display(boolean undecorated)
+	{
+		setUndecorated(undecorated);
+	}
 	
 	public void setFullScreen(boolean fullScreen)
 	{
@@ -39,6 +42,11 @@ public class Display extends JFrame
 				}
 			}
 		}
+	}
+	
+	public void switchFullScreen()
+	{
+		setFullScreen(!fullScreen);
 	}
 	  
 	public boolean isFullScreen() 

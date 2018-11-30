@@ -36,21 +36,6 @@ public final class GameFusionEngine
 	
 	private GameFusionEngine() {}
 	
-	public static void prepareToStart()
-	{		
-		display = new Display()
-		{
-			private static final long serialVersionUID = 6209237097299496909L;
-			
-			public void paint(Graphics g)
-			{
-				super.paint(g);
-				
-				g.drawImage(image, imageX, imageY, null);
-			}
-		};
-	}
-	
 	public static Level getLevel()
 	{
 		return currentLevel;
@@ -219,7 +204,22 @@ public final class GameFusionEngine
 	
 	public static void launch()
 	{
-		prepareToStart();
+		launch(false);
+	}
+	
+	public static void launch(boolean undecorated)
+	{
+		display = new Display(undecorated)
+		{
+			private static final long serialVersionUID = 6209237097299496909L;
+			
+			public void paint(Graphics g)
+			{
+				super.paint(g);
+				
+				g.drawImage(image, imageX, imageY, null);
+			}
+		};
 		
 		display.setSize(640, 480);
 		display.setLocationRelativeTo(null);
@@ -260,6 +260,12 @@ public final class GameFusionEngine
 		}, 0, 1);
 	}
 	
+	public static OSType getOSType()
+    {
+        String s = System.getProperty("os.name").toLowerCase();
+        return s.contains("win") ? OSType.WINDOWS : (s.contains("mac") ? OSType.OSX : (s.contains("solaris") ? OSType.SOLARIS : (s.contains("sunos") ? OSType.SOLARIS : (s.contains("linux") ? OSType.LINUX : (s.contains("unix") ? OSType.LINUX : OSType.UNKNOWN)))));
+    }
+	
 	public static long getTimeOnLevel()
 	{
 		return timeOnLevel;
@@ -273,5 +279,14 @@ public final class GameFusionEngine
 	public static String getLevelName()
 	{
 		return currentLevel.levelName;
+	}
+	
+	public static enum OSType
+	{
+		OSX,
+		LINUX,
+		SOLARIS,
+		WINDOWS,
+		UNKNOWN;
 	}
 }
