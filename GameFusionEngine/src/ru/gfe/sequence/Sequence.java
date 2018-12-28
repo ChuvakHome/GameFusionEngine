@@ -31,8 +31,38 @@ public class Sequence extends JLabel
   
 	public Sequence(URL... urls)
 	{
+		loadFrames(urls);
+	}
+  
+	public Sequence(File... files)
+	{
+		loadFrames(files);
+	}
+  
+	public Sequence(String... filenames)
+	{
+		loadFrames(filenames);
+	}
+  
+	public Sequence(File directory)
+	{
+		this(getImages(directory));
+	}
+  
+	public Sequence(Image[] imgs)
+	{
+		loadFrames(imgs);
+	}
+  
+	public void loadFrames(String directory)
+	{
+		loadFrames(new File(directory));
+	}
+	
+	public void loadFrames(URL... urls)
+	{
 		ArrayList<Image> imgs = new ArrayList();
-    
+	    
 		ImageIcon imageIcon = null;
     
 		for (URL url : urls)
@@ -50,8 +80,8 @@ public class Sequence extends JLabel
 		
 		timer = new Timer();
 	}
-  
-	public Sequence(File... files)
+	
+	public void loadFrames(File... files)
 	{
 		ArrayList<Image> imgs = new ArrayList();
     
@@ -73,7 +103,7 @@ public class Sequence extends JLabel
 		timer = new Timer();
 	}
   
-	public Sequence(String... filenames)
+	public void loadFrames(String... filenames)
 	{
 		ArrayList<Image> imgs = new ArrayList();
     
@@ -95,12 +125,12 @@ public class Sequence extends JLabel
 		timer = new Timer();
 	}
   
-	public Sequence(File directory)
+	public void loadFrames(File directory)
 	{
-		this(getImages(directory));
+		loadFrames(getImages(directory));
 	}
   
-	public Sequence(Image[] imgs)
+	public void loadFrames(Image[] imgs)
 	{
 		if (imgs != null)
 			frames = imgs;
@@ -109,7 +139,7 @@ public class Sequence extends JLabel
 	
 		timer = new Timer();
 	}
-  
+	
 	public boolean framesSequenceEnd()
 	{
 		return end;
