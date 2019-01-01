@@ -191,6 +191,7 @@ public class Sequence extends JLabel
 				index = 0;
 			else
 			{
+				timer.setRegular(false);
 				stop();
 				return frames[frames.length - 1];
 			}
