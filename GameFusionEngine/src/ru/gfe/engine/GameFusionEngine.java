@@ -337,9 +337,13 @@ public final class GameFusionEngine
 			sequences[i] = null;
 		}
 		
+		i = 0;
+		
 		sequences = null;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
+		
+		index = 0;
 	}
 	
 	public static OSType getOSType()
