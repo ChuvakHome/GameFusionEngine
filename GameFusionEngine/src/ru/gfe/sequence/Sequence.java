@@ -4,12 +4,13 @@ import java.awt.Image;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+import ru.gfe.engine.GameFusionEngine;
 import ru.gfe.handler.ResourceHandler;
+import sun.misc.Timer;
 
 public class Sequence extends JLabel
 {
@@ -20,6 +21,7 @@ public class Sequence extends JLabel
 	private Image[] frames;
 	private int index = 0;
 	private int loop = 1;
+	private boolean ring;
 	private boolean end;
 	private long delay = 40;
 	private Timer timer;
@@ -77,8 +79,6 @@ public class Sequence extends JLabel
 			frames = imgs.toArray(new Image[0]);
 		else
 			frames = new Image[0];
-		
-		timer = new Timer();
 	}
 	
 	public void loadFrames(File... files)
@@ -99,8 +99,6 @@ public class Sequence extends JLabel
 			frames = imgs.toArray(new Image[0]);
 		else
 			frames = new Image[0];
-      
-		timer = new Timer();
 	}
   
 	public void loadFrames(String... filenames)
@@ -121,8 +119,6 @@ public class Sequence extends JLabel
 			frames = imgs.toArray(new Image[0]);
 		else
 			frames = new Image[0];
-		
-		timer = new Timer();
 	}
   
 	public void loadFrames(File directory)
@@ -136,8 +132,6 @@ public class Sequence extends JLabel
 			frames = imgs;
 		else
 			frames = new Image[0];
-	
-		timer = new Timer();
 	}
 	
 	public boolean framesSequenceEnd()
@@ -162,27 +156,29 @@ public class Sequence extends JLabel
   
 	public void start()
 	{
-		if ((frames != null) && (frames.length > 0))
-		{
-			timer.scheduleAtFixedRate(new TimerTask() 
-			{
-				public void run() 
-				{
-					if (end)
-						timer.cancel();
-					else
-					{
-						setIcon(new ImageIcon(nextFrame()));
-						repaint();
-					}	
-				}
-			},  0, delay);
-		}
+		timer = new Timer(timer0 -> ring = true, delay);
+		timer.setRegular(true);
+		
+		GameFusionEngine.addSequence(this);
     }
   
+	public void pause()
+	{
+		timer.stop();
+	}
+	
+	public void resume()
+	{
+		timer.reset();
+	}
+	
 	public void stop()
 	{
 		end = true;
+		
+		timer.stop();
+		timer.owner = null;
+		timer = null;
 	}
   
 	private Image nextFrame()
@@ -195,7 +191,7 @@ public class Sequence extends JLabel
 				index = 0;
 			else
 			{
-				end = true;
+				stop();
 				return frames[frames.length - 1];
 			}
 		}
@@ -203,6 +199,15 @@ public class Sequence extends JLabel
 		return frames[index++];
 	}
   
+	public void updateSequence()
+	{
+		if (ring)
+		{
+			setIcon(ResourceHandler.getImageIcon(nextFrame()));
+			ring = false;
+		}
+	}
+	
   	private static Image[] getImages(File directory)
   	{
   		if (directory.isDirectory())
