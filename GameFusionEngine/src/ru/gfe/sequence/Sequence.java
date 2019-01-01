@@ -4,13 +4,14 @@ import java.awt.Image;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import ru.gfe.engine.GameFusionEngine;
 import ru.gfe.handler.ResourceHandler;
-import sun.misc.Timer;
 
 public class Sequence extends JLabel
 {
@@ -22,6 +23,7 @@ public class Sequence extends JLabel
 	private int index = 0;
 	private int loop = 1;
 	private boolean ring;
+	private boolean pause;
 	private boolean end;
 	private long delay = 40;
 	private Timer timer;
@@ -156,28 +158,36 @@ public class Sequence extends JLabel
   
 	public void start()
 	{
-		timer = new Timer(timer0 -> ring = true, delay);
-		timer.setRegular(true);
+		timer = new Timer();
+		
+		timer.purge();
+		
+		timer.scheduleAtFixedRate(new TimerTask() 
+		{
+			public void run() 
+			{
+				ring = true;
+			}
+		}, 0, delay);
 		
 		GameFusionEngine.addSequence(this);
     }
   
 	public void pause()
 	{
-		timer.stop();
+		pause = true;
 	}
 	
 	public void resume()
 	{
-		timer.reset();
+		pause = false;
 	}
 	
 	public void stop()
 	{
 		end = true;
 		
-		timer.stop();
-		timer.owner = null;
+		timer.cancel();
 		timer = null;
 	}
   
@@ -191,7 +201,6 @@ public class Sequence extends JLabel
 				index = 0;
 			else
 			{
-				timer.setRegular(false);
 				stop();
 				return frames[frames.length - 1];
 			}
@@ -204,7 +213,9 @@ public class Sequence extends JLabel
 	{
 		if (ring)
 		{
-			setIcon(ResourceHandler.getImageIcon(nextFrame()));
+			if (!pause)
+				setIcon(ResourceHandler.getImageIcon(nextFrame()));
+				
 			ring = false;
 		}
 	}

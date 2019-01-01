@@ -280,7 +280,7 @@ public final class GameFusionEngine
 	
 	public static boolean addSequence(Sequence sequence)
 	{
-		if (index < SEQUENCE_ARRAY_SIZE)
+		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE && sequence != null)
 		{
 			sequences[index++] = sequence;
 			
@@ -295,7 +295,10 @@ public final class GameFusionEngine
 		int i = 0;
 		
 		for (i = 0; i <= index; ++i)
-			sequences[i].updateSequence();
+		{			
+			if (sequences[i] != null)
+				sequences[i].updateSequence();
+		}
 		
 		i = 0;
 	}
