@@ -258,8 +258,7 @@ public final class GameFusionEngine
 					{	
 						++timeOnLevel;
 						
-						for (Sequence seq: sequences)
-							seq.updateSequence();
+						updateSequences();
 						
 						if (engineHandler != null)
 							engineHandler.update();
@@ -289,6 +288,16 @@ public final class GameFusionEngine
 		}
 		else
 			return false;
+	}
+	
+	public static void updateSequences()
+	{
+		int i = 0;
+		
+		for (i = 0; i <= index; ++i)
+			sequences[i].updateSequence();
+		
+		i = 0;
 	}
 	
 	public static void removeSequence(Sequence sequence)
