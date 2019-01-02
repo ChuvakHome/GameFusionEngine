@@ -32,7 +32,7 @@ public class Sequence
 		this(new File(directory));
 	}
   
-	public void setName(String sequenceName)
+	public void setSequenceName(String sequenceName)
 	{
 		name = sequenceName;
 	}
@@ -256,5 +256,33 @@ public class Sequence
   		}
     
   		return null;
+  	}
+  	
+  	public Sequence clone()
+  	{
+  		Sequence clone = new Sequence("");
+  		
+  		clone.loop = loop;
+  		clone.delay = delay;
+  		clone.frames = frames.clone();
+  		
+  		return clone;
+  	}
+  	
+  	public boolean equalsFrames(Sequence sequence)
+  	{
+  		return sequence != null && sequence.frames == frames;
+  	}
+  	
+  	public boolean equals(Object o)
+  	{
+  		if (o != null && o instanceof Sequence)
+  		{
+  			Sequence seq = (Sequence) o;
+  			
+  			return frames.equals(seq.frames) && delay == seq.delay;
+  		}
+  			
+  		return false;
   	}
 }

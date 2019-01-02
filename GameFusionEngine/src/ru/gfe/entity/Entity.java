@@ -110,7 +110,7 @@ public class Entity implements IEntity
 	public void startSequence(int index)
 	{
 		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE && this.index != index)
-		{
+		{	
 			if (this.index >= 0)
 			{
 				sequences[this.index].pause();
