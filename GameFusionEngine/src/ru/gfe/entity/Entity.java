@@ -129,7 +129,7 @@ public class Entity implements IEntity
 	
 	public void resetToPrimarySequence()
 	{
-		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE)
+		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE && index != -1)
 		{
 			sequences[index].pause();
 			sequences[index].reset();
@@ -143,6 +143,30 @@ public class Entity implements IEntity
 		primarySequence.reset();
 		
 		primarySequence.start();
+	}
+	
+	public void startOrResumeCurrentSequence()
+	{
+		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE)
+		{
+			if (sequences[index].isStarted())
+			{
+				if (sequences[index].isPaused())
+					sequences[index].resume();
+			}
+			else
+				sequences[index].start();
+		}
+		else if (index == -1)
+		{
+			if (primarySequence.isStarted())
+			{
+				if (primarySequence.isPaused())
+					primarySequence.resume();
+			}
+			else
+				primarySequence.start();
+		}
 	}
 	
 	public void update()

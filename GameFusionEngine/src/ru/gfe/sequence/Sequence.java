@@ -153,6 +153,11 @@ public class Sequence
 		return (int) (1000 / delay);
 	}
   
+	public boolean isStarted()
+	{
+		return start;
+	}
+	
 	public void start()
 	{
 		start = true;
