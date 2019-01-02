@@ -4,29 +4,26 @@ import java.awt.Image;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
-import ru.gfe.engine.GameFusionEngine;
 import ru.gfe.handler.ResourceHandler;
 
-public class Sequence extends JLabel
-{
-	private static final long serialVersionUID = 8918754447101183453L;
-	
+public class Sequence
+{	
 	public static final int LOOP_CONTINUOUSLY = -1;
 	
 	private Image[] frames;
 	private int index = 0;
 	private int loop = 1;
-	private boolean ring;
+	private boolean start;
 	private boolean pause;
 	private boolean end;
 	private long delay = 40;
-	private Timer timer;
+	private long updateTime;
+	
+	private Icon currentFrame;
   
 	public Sequence(String directory)
 	{
@@ -158,24 +155,17 @@ public class Sequence extends JLabel
   
 	public void start()
 	{
-		timer = new Timer();
-		
-		timer.purge();
-		
-		timer.scheduleAtFixedRate(new TimerTask() 
-		{
-			public void run() 
-			{
-				ring = true;
-			}
-		}, 0, delay);
-		
-		GameFusionEngine.addSequence(this);
+		start = true;
     }
   
 	public void pause()
 	{
 		pause = true;
+	}
+	
+	public boolean isPaused()
+	{
+		return pause;
 	}
 	
 	public void resume()
@@ -185,10 +175,8 @@ public class Sequence extends JLabel
 	
 	public void stop()
 	{
+		start = false;
 		end = true;
-		
-		timer.cancel();
-		timer = null;
 	}
   
 	private Image nextFrame()
@@ -209,15 +197,30 @@ public class Sequence extends JLabel
 		return frames[index++];
 	}
   
-	public void updateSequence()
+	public void reset()
 	{
-		if (ring)
-		{
-			if (!pause)
-				setIcon(ResourceHandler.getImageIcon(nextFrame()));
+		index = 0;
+	}
+	
+	public void update()
+	{
+		if (start)
+		{	
+			++updateTime;
+			
+			if (updateTime >= delay)
+			{
+				updateTime = 0;
 				
-			ring = false;
+				if (!pause)
+					currentFrame = ResourceHandler.getImageIcon(nextFrame());
+			}
 		}
+	}
+	
+	public Icon getCurrentFrame()
+	{
+		return currentFrame;
 	}
 	
   	private static Image[] getImages(File directory)

@@ -14,12 +14,9 @@ import ru.gfe.handler.EngineHandler;
 import ru.gfe.handler.KeyHandler;
 import ru.gfe.handler.MouseHandler;
 import ru.gfe.handler.SoundHandler;
-import ru.gfe.sequence.Sequence;
 
 public final class GameFusionEngine 
 {
-	public static final int SEQUENCE_ARRAY_SIZE = 127;
-	
 	private static Display display;
 	private static Image image;
 	
@@ -34,10 +31,6 @@ public final class GameFusionEngine
 	
 	private static int imageX, imageY;
 	private static long timeOnLevel;
-	
-	private static Sequence[] sequences;
-	
-	private static int index = 0;
 	
 	private static Level currentLevel;
 	
@@ -128,8 +121,6 @@ public final class GameFusionEngine
 			currentLevel.destroy();
 			currentLevel = level;
 			
-			clearSequenceArray();
-			
 			if (removeFrameImage)
 				removeFrameImage();
 			
@@ -217,9 +208,7 @@ public final class GameFusionEngine
 	}
 	
 	public static void launch(boolean undecorated)
-	{
-		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
-		
+	{	
 		display = new Display(undecorated)
 		{
 			private static final long serialVersionUID = 6209237097299496909L;
@@ -258,8 +247,6 @@ public final class GameFusionEngine
 					{	
 						++timeOnLevel;
 						
-						updateSequences();
-						
 						if (engineHandler != null)
 							engineHandler.update();
 						
@@ -271,91 +258,6 @@ public final class GameFusionEngine
 					exit();
 			}
 		}, 0, 1);
-	}
-	
-	/**
-	 * Adds sequence to update
-	 * @return
-	 */
-	
-	public static boolean addSequence(Sequence sequence)
-	{
-		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE && sequence != null)
-		{
-			sequences[index++] = sequence;
-			
-			return true;
-		}
-		else
-			return false;
-	}
-	
-	public static void updateSequences()
-	{
-		int i = 0;
-		
-		for (i = 0; i <= index; ++i)
-		{			
-			if (sequences[i] != null)
-				sequences[i].updateSequence();
-		}
-		
-		i = 0;
-	}
-	
-	public static void removeSequence(Sequence sequence)
-	{
-		int i = 0;
-		int j = -1;
-		int k = 0;
-		
-		for (i = 0; i < SEQUENCE_ARRAY_SIZE && j < 0; ++i)
-		{
-			if (sequences[i].equals(sequence))
-				j = i;
-		}
-		
-		if (j >= 0)
-		{
-			sequences[j].stop();
-			
-			sequences[j] = null; 
-			
-			Sequence[] temp = new Sequence[SEQUENCE_ARRAY_SIZE];
-			
-			for (i = 0; i < SEQUENCE_ARRAY_SIZE; ++i)
-			{
-				if (i != j)
-					temp[k++] = sequences[i];
-			}
-			
-			sequences = temp;
-			
-			temp = null;
-		}
-		
-		i = 0;
-		j = 0;
-		k = 0;
-	}
-	
-	public static void clearSequenceArray()
-	{
-		int i = 0;
-		
-		for (i = 0; i < SEQUENCE_ARRAY_SIZE; ++i)
-		{
-			sequences[i].stop();
-			sequences[i] = null;
-		}
-		
-		i = 0;
-		
-		sequences = null;
-		
-		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
-		
-		index = 0;
 	}
 	
 	public static OSType getOSType()
