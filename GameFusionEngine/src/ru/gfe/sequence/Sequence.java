@@ -23,6 +23,8 @@ public class Sequence
 	private long delay = 40;
 	private long updateTime;
 	
+	private String name; 
+	
 	private Icon currentFrame;
   
 	public Sequence(String directory)
@@ -30,6 +32,16 @@ public class Sequence
 		this(new File(directory));
 	}
   
+	public void setName(String sequenceName)
+	{
+		name = sequenceName;
+	}
+	
+	public String getSequenceName()
+	{
+		return name;
+	}
+	
 	public Sequence(URL... urls)
 	{
 		loadFrames(urls);
