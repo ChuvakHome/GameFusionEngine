@@ -152,12 +152,20 @@ public class Sequence
   
 	public void loop(int loopTimes)
 	{
-		loop = loopTimes;
+		if (loopTimes >= 0)	
+			loop = loopTimes;
+		else
+			throw new NumberFormatException("Loop cannot be negative");
 	}
   
 	public void setFPS(int fps)
 	{
-		delay = 1000 / fps;
+		if (fps > 0)
+			delay = 1000 / fps;
+		else if (fps == 0)
+			throw new NumberFormatException("FPS cannot be zero");
+		else
+			throw new NumberFormatException("FPS cannot be negative");
 	}
   
 	public int getFPS()
