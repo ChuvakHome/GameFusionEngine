@@ -1,5 +1,8 @@
 package ru.gfe.entity;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+
 import javax.swing.Icon;
 import javax.swing.JLabel;
 
@@ -47,6 +50,14 @@ public class Entity implements IEntity
 	public JLabel getVisual()
 	{
 		return body;
+	}
+	
+	public Rectangle getRect()
+	{	
+		if (body != null && body.getIcon() != null)
+			return new Rectangle(posX, posY, body.getIcon().getIconWidth(), body.getIcon().getIconHeight());
+		else
+			return null;
 	}
 	
 	public Entity(JLabel body, Sequence primarySequence, int id)
@@ -168,6 +179,8 @@ public class Entity implements IEntity
 				primarySequence.start();
 		}
 	}
+	
+	public void processCollision(IEntity entity) {}
 	
 	public void update()
 	{
@@ -297,6 +310,19 @@ public class Entity implements IEntity
 		body.setLocation(this.posX, this.posY);
 	}
 	
+	public void setLocation(Point p)
+	{
+		this.posX = p.x;
+		this.posY = p.y;
+		
+		body.setLocation(p);
+	}
+	
+	public Point getLocation()
+	{
+		return body.getLocation();
+	}
+	
 	public void setX(int posX)
 	{
 		this.posX = posX;
@@ -319,11 +345,6 @@ public class Entity implements IEntity
 	public int getY()
 	{
 		return posY;
-	}
-	
-	public JLabel getBody()
-	{
-		return body;
 	}
 	
 	public int getId()

@@ -152,7 +152,7 @@ public class Sequence
   
 	public void loop(int loopTimes)
 	{
-		if (loopTimes >= 0)	
+		if (loopTimes >= 0 || loopTimes == LOOP_CONTINUOUSLY)	
 			loop = loopTimes;
 		else
 			throw new NumberFormatException("Loop cannot be negative");

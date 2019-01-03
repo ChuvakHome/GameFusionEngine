@@ -1,12 +1,16 @@
 package ru.gfe.display;
 
+import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
+
 import ru.gfe.engine.GameFusionEngine;
 
 public class Display extends JFrame
@@ -32,9 +36,9 @@ public class Display extends JFrame
 			if (graphicsConfiguration != null)
 			{
 				graphicsDevice = graphicsConfiguration.getDevice();
-	        
+				
 				if (graphicsDevice != null)
-				{
+				{	
 					if (fullScreen)
 						graphicsDevice.setFullScreenWindow(this);
 					else
@@ -42,6 +46,26 @@ public class Display extends JFrame
 				}
 			}
 		}
+	}
+	
+	public static int getResolution()
+	{
+		return Toolkit.getDefaultToolkit().getScreenResolution();
+	}
+	
+	public static int getScreenWidth()
+	{
+		return getScreenDimension().width;
+	}
+	
+	public static int getScreenHeight()
+	{
+		return getScreenDimension().height;
+	}
+	
+	public static Dimension getScreenDimension()
+	{
+		return Toolkit.getDefaultToolkit().getScreenSize();
 	}
 	
 	public void switchFullScreen()

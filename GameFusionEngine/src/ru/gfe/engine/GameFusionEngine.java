@@ -1,5 +1,6 @@
 package ru.gfe.engine;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -39,6 +40,16 @@ public final class GameFusionEngine
 	public static Level getLevel()
 	{
 		return currentLevel;
+	}
+	
+	public static int getDisplayWidth()
+	{
+		return display.getWidth();
+	}
+	
+	public static int getDisplayHeight()
+	{
+		return display.getHeight();
 	}
 	
 	public static void setKeyHandler(KeyHandler handler)
@@ -207,7 +218,27 @@ public final class GameFusionEngine
 		launch(false);
 	}
 	
+	public static void launch(int width, int height)
+	{
+		launch(width, height, false);
+	}
+	
 	public static void launch(boolean undecorated)
+	{
+		launch(Display.getScreenDimension(), undecorated);
+	}
+	
+	public static void launch(Dimension dimension)
+	{
+		launch(dimension.width, dimension.height);
+	}
+	
+	public static void launch(Dimension dimension, boolean undecorated)
+	{
+		launch(dimension.width, dimension.height, undecorated);
+	}
+	
+	public static void launch(int width, int height, boolean undecorated)
 	{	
 		display = new Display(undecorated)
 		{
@@ -221,7 +252,7 @@ public final class GameFusionEngine
 			}
 		};
 		
-		display.setSize(640, 480);
+		display.setSize(width, height);
 		display.setLocationRelativeTo(null);
 		
 		if (currentLevel != null)
