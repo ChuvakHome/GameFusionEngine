@@ -130,8 +130,8 @@ public final class GameFusionEngine
 			display.setContentPane(currentLevel.levelContainer);
 			currentLevel.postInit();
 			
-			display.setVisible(true);
-			
+			display.setVisible(true);	
+				
 			updateLevel = true;
 			
 			timeOnLevel = 0;
@@ -228,10 +228,11 @@ public final class GameFusionEngine
 		{
 			currentLevel.init();
 			display.setContentPane(currentLevel.getLevelContainer());
-			currentLevel.postInit();
 		}
 		
 		display.setVisible(true);
+		
+		currentLevel.postInit();
 		
 		started = true;
 		updateLevel = true;

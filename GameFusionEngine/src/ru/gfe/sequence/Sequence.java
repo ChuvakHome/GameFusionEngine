@@ -206,8 +206,9 @@ public class Sequence
 				index = 0;
 			else
 			{
+				
+				index = frames.length - 1;
 				stop();
-				return frames[frames.length - 1];
 			}
 		}
     
