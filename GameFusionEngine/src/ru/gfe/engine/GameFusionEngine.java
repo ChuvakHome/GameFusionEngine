@@ -232,7 +232,8 @@ public final class GameFusionEngine
 		
 		display.setVisible(true);
 		
-		currentLevel.postInit();
+		if (currentLevel != null)
+			currentLevel.postInit();
 		
 		started = true;
 		updateLevel = true;

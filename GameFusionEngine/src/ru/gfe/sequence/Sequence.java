@@ -172,7 +172,13 @@ public class Sequence
 	
 	public void start()
 	{
-		start = true;
+		if (frames.length > 0)
+		{
+			start = true;
+		
+			currentFrame = ResourceHandler.getImageIcon(frames[0]);
+			index++;
+		}
     }
   
 	public void pause()

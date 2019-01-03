@@ -184,7 +184,7 @@ public class Entity implements IEntity
 			temp = primarySequence.getCurrentFrame();
 		}
 		
-		if (icon == null || !icon.equals(temp))
+		if (temp != null && (icon == null || !icon.equals(temp)))
 		{
 			icon = temp;
 			body.setIcon(icon);
