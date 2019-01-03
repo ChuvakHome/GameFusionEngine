@@ -14,7 +14,7 @@ public class Level
 	protected Container levelContainer = new Container();
 	protected String levelName;
 	
-	private IEntity[] ientities = new IEntity[127];
+	private IEntity[] ientities = new IEntity[IENTITIES_ARRAY_SIZE];
 	
 	private int index;
 	
