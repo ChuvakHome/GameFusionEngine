@@ -96,7 +96,7 @@ public class Level
 				{
 					if (ientities[j] != null)
 					{
-						if (i == j)
+						if (i >= j)
 							collisionMatrix[i][i] = false;
 						else
 						{
