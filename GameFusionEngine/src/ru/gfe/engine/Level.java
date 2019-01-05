@@ -27,13 +27,25 @@ public class Level
 		return levelContainer;
 	}
 	
-	public int addEntity(IEntity ientity)
+	/**
+	 * Returns true if ientity successfully added else returns false
+	 * @param ientity
+	 * @return true if {@code ientity} successfully added else returns false
+	 */
+	public boolean addEntity(IEntity ientity)
 	{
-		ientities[index] = ientity;
-		
-		levelContainer.add(ientities[index++].getVisual());
-		
-		return index & ientity.getId();
+		if (index >= 0 && index < IENTITIES_ARRAY_SIZE && ientity != null && ientity.getLevel() == null)
+		{
+			ientities[index] = ientity;
+			
+			levelContainer.add(ientities[index].getVisual());
+			
+			ientity.setLevel(this, index++);
+			
+			return true;
+		}
+		else
+			return false;
 	}
 	
 	public String getLevelName()
@@ -85,18 +97,15 @@ public class Level
 					if (ientities[j] != null)
 					{
 						if (i == j)
-							collisionMatrix[i][i] = true;
+							collisionMatrix[i][i] = false;
 						else
 						{
 							rect2 = ientities[j].getRect();
 								
-							if (rect1 != null && rect2 != null )
+							if (rect1 != null && rect2 != null)
 							{
 								if (!collisionMatrix[i][j] && rect1.intersects(rect2))
 								{
-									ientities[i].processCollision(ientities[j]);
-									ientities[j].processCollision(ientities[i]);
-									
 									collisionMatrix[i][j] = true;
 									collisionMatrix[j][i] = true;
 								}
@@ -119,12 +128,64 @@ public class Level
 		rect2 = null;
 	}
 	
+	public IEntity[] getIEntityArray()
+	{
+		return ientities;
+	}
+	
+	public boolean collision(IEntity ientity, Class<? extends IEntity> clazz)
+	{
+		if (ientity != null && ientity.getLevel() != null && ientity.getLevel().equals(this) && clazz != null)
+		{
+			int i = ientity.getId();
+			int j = 0;
+		
+			for (j = 0; j < IENTITIES_ARRAY_SIZE; ++j)
+			{
+				if (collisionMatrix[i][j] && clazz.isInstance(ientities[j]))
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean collision(Class<? extends IEntity> clazz1, Class<? extends IEntity> clazz2)
+	{
+		if (clazz1 != null && clazz2 != null)
+		{
+			int i = 0;
+			int j = 0;
+		
+			for (i = 0; i < IENTITIES_ARRAY_SIZE; ++i)
+			{
+				for (j = 0; j < IENTITIES_ARRAY_SIZE; ++j)
+				{
+					if (collisionMatrix[i][j] && (clazz1.isInstance(ientities[i]) && clazz2.isInstance(ientities[j]) || 
+							clazz1.isInstance(ientities[j]) && clazz2.isInstance(ientities[i])))
+							return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	protected void destroy() 
 	{
 		levelContainer.removeAll();
 		levelContainer.setLayout(null);
 		levelContainer = null;
 		levelName = null;
+	}
+	
+	public boolean collision(IEntity ientity1, IEntity ientity2)
+	{
+		if (ientity1 != null && ientity2 != null && !ientity1.equals(ientity2) && ientity1.getLevel() != null && ientity1.getLevel().equals(this) && ientity2.getLevel() != null 
+			&& ientity2.getLevel().equals(this))
+			return collisionMatrix[ientity1.getId()][ientity2.getId()];
+		else
+			return false;
 	}
 	
 	public void processKeyEvent(KeyEvent e) {}

@@ -4,6 +4,8 @@ import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
+import ru.gfe.engine.Level;
+
 public interface IEntity 
 {
 	public void update();
@@ -18,7 +20,9 @@ public interface IEntity
 	
 	public int getY();
 	
-	public void processCollision(IEntity entity);
+	public void setLevel(Level level, int idOnLevel);
+	
+	public Level getLevel();
 	
 	public <C extends JComponent> C getVisual();
 	

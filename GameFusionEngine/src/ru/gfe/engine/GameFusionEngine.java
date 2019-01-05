@@ -322,4 +322,22 @@ public final class GameFusionEngine
 		WINDOWS,
 		UNKNOWN;
 	}
+	
+	public static int booleanToInt(boolean b)
+	{
+		return b ? 1 : 0;
+	}
+	
+	public static boolean intToBoolean(int x)
+	{
+		switch (x)
+		{
+			case 1:
+				return true;
+			case 0:
+				return false;
+			default:
+				throw new NumberFormatException("Argument cannot be negative");
+		}
+	}
 }

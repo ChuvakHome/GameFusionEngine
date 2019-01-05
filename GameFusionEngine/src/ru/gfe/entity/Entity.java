@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 
+import ru.gfe.engine.Level;
 import ru.gfe.exception.IndexAlreadyInUseException;
 import ru.gfe.sequence.Sequence;
 
@@ -21,28 +22,28 @@ public class Entity implements IEntity
 	private Sequence[] sequences;
 	private Sequence primarySequence;
 	
-	private int posX; 
-	private int posY;
+	protected int posX; 
+	protected int posY;
 	private int index = -1;
-	private int id = -1;
+	protected int id = -1;
 	
-	public Entity(JLabel body, Sequence primarySequence, int posX, int posY, int id)
+	private Level level;
+	
+	public Entity(JLabel body, Sequence primarySequence, int posX, int posY)
 	{
 		this.body = body;
 		this.primarySequence = primarySequence;
 		this.posX = posY;
 		this.posY = posY;
-		this.id = id >= 0 ? id : -1;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
 	}
 	
-	public Entity(JLabel body, int posX, int posY, int id)
+	public Entity(JLabel body, int posX, int posY)
 	{
 		this.body = body;
 		this.posX = posY;
 		this.posY = posY;
-		this.id = id >= 0 ? id : -1;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
 	}
@@ -60,26 +61,56 @@ public class Entity implements IEntity
 			return null;
 	}
 	
-	public Entity(JLabel body, Sequence primarySequence, int id)
+	public Entity(JLabel body, Sequence primarySequence)
 	{
-		this(body, primarySequence, body.getX(), body.getY(), id);
+		this(body, primarySequence, body.getX(), body.getY());
 	}
 	
-	public Entity(JLabel body, int id)
+	public Entity(JLabel body)
 	{
-		this(body, body.getX(), body.getY(), id);
+		this(body, body.getX(), body.getY());
 	}
 	
 	public void setBody(JLabel body)
 	{
-		this.body = body;
-		posX = body.getX();
-		posY = body.getY();
+		if (body != null)
+		{	
+			this.body = body;
+			posX = body.getX();
+			posY = body.getY();
+		}
+	}
+	
+	public void setLevel(Level level, int id)
+	{
+		if (level != null && this.level == null && id >= 0 && this.id >= 0)
+		{
+			this.level = level;
+			this.id = id;
+		}
+	}
+	
+	public boolean collision(IEntity ientity)
+	{
+		return level != null ? level.collision(this, ientity) : false;
+	}
+	
+	public boolean collision(Class<? extends IEntity> clazz)
+	{
+		return level != null ? level.collision(this, clazz) : false;
+	}
+
+	public Level getLevel()
+	{
+		return level;
 	}
 	
 	public void changeBodyStatic(JLabel body)
 	{
-		this.body = body;
+		if (body != null)
+		{
+			this.body = body;
+		}
 	}
 	
 	public boolean addSequence(Sequence sequence, int index, boolean replace) throws IndexAlreadyInUseException
