@@ -22,6 +22,8 @@ public class Level
 	
 	private int index;
 	
+	private boolean canDestroy;
+	
 	public Container getLevelContainer()
 	{
 		return levelContainer;
@@ -173,10 +175,27 @@ public class Level
 	
 	protected void destroy() 
 	{
+		canDestroy = true;
+		
 		levelContainer.removeAll();
 		levelContainer.setLayout(null);
 		levelContainer = null;
 		levelName = null;
+		
+		int i = 0;
+		
+		for (i = 0; i < IENTITIES_ARRAY_SIZE; ++i)
+		{
+			if (ientities[i] != null)	
+				ientities[i].destroy();
+		}
+		
+		i = 0;
+	}
+	
+	public boolean canDestroy()
+	{
+		return canDestroy;
 	}
 	
 	public boolean collision(IEntity ientity1, IEntity ientity2)

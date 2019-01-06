@@ -143,6 +143,8 @@ public class Entity implements IEntity
 			return false;
 	}
 	
+	public void destroy() {}
+	
 	public void setPrimarySequence(Sequence primarySequence)
 	{
 		if (primarySequence != null && (this.primarySequence == null || !this.primarySequence.equals(primarySequence)))

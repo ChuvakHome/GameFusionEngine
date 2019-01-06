@@ -27,4 +27,6 @@ public interface IEntity
 	public <C extends JComponent> C getVisual();
 	
 	public Rectangle getRect();
+	
+	public void destroy();
 }
