@@ -162,6 +162,11 @@ public class Entity implements IEntity
 		id = 0;
 	}
 	
+	public boolean canDestroy()
+	{
+		return level != null && level.canDestroy();
+	}
+	
 	public void setPrimarySequence(Sequence primarySequence)
 	{
 		if (primarySequence != null && (this.primarySequence == null || !this.primarySequence.equals(primarySequence)))
