@@ -154,8 +154,15 @@ public class Entity implements IEntity
 			
 			level = null;
 			
+			destroyAllSequence();
+			
 			sequences = null;
-			primarySequence = null;
+			
+			if (primarySequence != null)
+			{
+				primarySequence.destroy();
+				primarySequence = null;
+			}
 			
 			posX = 0;
 			posY = 0;
@@ -168,6 +175,17 @@ public class Entity implements IEntity
 	protected boolean canDestroy()
 	{
 		return level != null && level.canDestroy();
+	}
+	
+	protected void destroyAllSequence()
+	{
+		int i = 0;
+		
+		for (i = 0; i < SEQUENCE_ARRAY_SIZE; ++i)
+		{
+			if (sequences[i] != null)
+				sequences[i].destroy();
+		}
 	}
 	
 	public void setPrimarySequence(Sequence primarySequence)

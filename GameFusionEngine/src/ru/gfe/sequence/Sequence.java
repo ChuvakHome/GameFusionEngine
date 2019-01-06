@@ -74,62 +74,71 @@ public class Sequence
 	
 	public void loadFrames(URL... urls)
 	{
-		ArrayList<Image> imgs = new ArrayList();
+		if (urls != null)
+		{	
+			ArrayList<Image> imgs = new ArrayList();
+		    
+			ImageIcon imageIcon = null;
 	    
-		ImageIcon imageIcon = null;
-    
-		for (URL url : urls)
-		{
-			imageIcon = ResourceHandler.getImageIcon(url);
-      
-			if (imageIcon != null)
-				imgs.add(imageIcon.getImage());
+			for (URL url : urls)
+			{
+				imageIcon = ResourceHandler.getImageIcon(url);
+	      
+				if (imageIcon != null)
+					imgs.add(imageIcon.getImage());
+			}
+			
+			if ((imgs != null) && (imgs.size() > 0))
+				frames = imgs.toArray(new Image[0]);
+			else
+				frames = new Image[0];
 		}
-		
-		if ((imgs != null) && (imgs.size() > 0))
-			frames = imgs.toArray(new Image[0]);
-		else
-			frames = new Image[0];
 	}
 	
 	public void loadFrames(File... files)
 	{
-		ArrayList<Image> imgs = new ArrayList();
-    
-		String s = null;
-    
-		for (File file : files)
+		if (files != null)
 		{
-			s = ResourceHandler.getExtention(file);
-      
-			if ((s != null) && (s.equals("png")))
-				imgs.add(new ImageIcon(file.getPath()).getImage());
+			ArrayList<Image> imgs = new ArrayList();
+	    
+			String s = null;
+	    
+			for (File file : files)
+			{
+				s = ResourceHandler.getExtention(file);
+	      
+				if ((s != null) && (s.equals("png")))
+					imgs.add(new ImageIcon(file.getPath()).getImage());
+			}
+			
+			if ((imgs != null) && (imgs.size() > 0))
+				frames = imgs.toArray(new Image[0]);
+			else
+				frames = new Image[0];
 		}
-		
-		if ((imgs != null) && (imgs.size() > 0))
-			frames = imgs.toArray(new Image[0]);
-		else
-			frames = new Image[0];
 	}
   
 	public void loadFrames(String... filenames)
 	{
-		ArrayList<Image> imgs = new ArrayList();
-    
-		String s = null;
-    
-		for (String filename : filenames)
-		{
-			s = ResourceHandler.getExtention(filename);
-      
-			if ((s != null) && (s.equals("png")))
-				imgs.add(new ImageIcon(filename).getImage());
+		if (filenames != null)
+		{	
+			ArrayList<Image> imgs = new ArrayList();
+	    
+			String s = null;
+	    
+			for (String filename : filenames)
+			{
+				s = ResourceHandler.getExtention(filename);
+	      
+				if ((s != null) && (s.equals("png")))
+					imgs.add(new ImageIcon(filename).getImage());
+			}
+	    
+			if ((imgs != null) && (imgs.size() > 0))
+				frames = imgs.toArray(new Image[0]);
+			else
+				frames = new Image[0];
 		}
-    
-		if ((imgs != null) && (imgs.size() > 0))
-			frames = imgs.toArray(new Image[0]);
-		else
-			frames = new Image[0];
 	}
   
 	public void loadFrames(File directory)
@@ -299,5 +308,36 @@ public class Sequence
   		}
   			
   		return false;
+  	}
+  	
+  	public void removeFrames()
+  	{
+  		if (frames != null)
+  		{
+  			int i = 0;
+  			
+  			for (i = 0; i < frames.length; ++i)
+  				frames[i] = null;
+  		}
+  	}
+  	
+  	public void destroy()
+  	{
+  		removeFrames();
+  		
+  		frames = null;
+  		currentFrame = null;
+  		
+  		name = null;
+  		
+  		index = 0;
+  		loop = 0;
+  		
+  		delay = 0;
+  		updateTime = 0;
+  		
+  		start = false;
+  		pause = false;
+  		end = false;
   	}
 }
