@@ -83,7 +83,7 @@ public class Entity implements IEntity
 	
 	public void setLevel(Level level, int id)
 	{
-		if (level != null && this.level == null && id >= 0 && this.id >= 0)
+		if (level != null && this.level == null && id >= 0 && this.id < 0)
 		{
 			this.level = level;
 			this.id = id;
