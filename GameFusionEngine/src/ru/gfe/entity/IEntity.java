@@ -22,6 +22,8 @@ public interface IEntity
 	
 	public void setLevel(Level level, int idOnLevel);
 	
+	public void removeLevel(Level level, int id);
+	
 	public Level getLevel();
 	
 	public <C extends JComponent> C getVisual();

@@ -87,6 +87,17 @@ public class Entity implements IEntity
 		{
 			this.level = level;
 			this.id = id;
+			
+			destroy();
+		}
+	}
+	
+	public void removeLevel(Level level, int id)
+	{
+		if (this.level != null && level != null && this.level.equals(level) && this.id >= 0 && id >= 0 && this.id == id)
+		{
+			this.level = null;
+			this.id = -1;
 		}
 	}
 	

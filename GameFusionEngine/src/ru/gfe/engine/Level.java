@@ -29,11 +29,6 @@ public class Level
 		return levelContainer;
 	}
 	
-	/**
-	 * Returns true if ientity successfully added else returns false
-	 * @param ientity
-	 * @return true if {@code ientity} successfully added else returns false
-	 */
 	public boolean addEntity(IEntity ientity)
 	{
 		if (index >= 0 && index < IENTITIES_ARRAY_SIZE && ientity != null && ientity.getLevel() == null)
@@ -48,6 +43,19 @@ public class Level
 		}
 		else
 			return false;
+	}
+	
+	public void removeEntity(int id)
+	{
+		if (id >= 0)
+		{
+			if (ientities[id] != null && ientities[id].getLevel() != null && ientities[id].getLevel().equals(this))
+			{
+				ientities[id].removeLevel(this, id);
+				ientities[id] = null;
+				levelContainer.remove(id);
+			}
+		}
 	}
 	
 	public String getLevelName()
