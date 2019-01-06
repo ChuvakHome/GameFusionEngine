@@ -2,5 +2,5 @@ package ru.gfe.entity;
 
 public enum Movement 
 {
-	LEFT, RIGHT;
+	NONE, LEFT, RIGHT;
 }
