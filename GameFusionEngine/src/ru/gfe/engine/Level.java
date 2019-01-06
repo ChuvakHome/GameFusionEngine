@@ -181,6 +181,53 @@ public class Level
 		return false;
 	}
 	
+	/**
+	 * Returns true if {@code ientity} collided with any other ientity else return false
+	 * @param ientity
+	 * @return
+	 */
+	public boolean collision(IEntity ientity)
+	{
+		if (ientity != null && ientity.getLevel() != null && ientity.getLevel().equals(this))
+		{
+			int i = ientity.getId();
+			int j = 0;
+			
+			for (j = 0; j < IENTITIES_ARRAY_SIZE; ++j)
+			{
+				if (collisionMatrix[i][j])
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Returns true if {@code ientity} collided with any other ientity else return false
+	 * @param ientity
+	 * @return
+	 */
+	public boolean collision(Class<? extends IEntity> clazz)
+	{
+		if (clazz != null)
+		{
+			int i = 0;
+			int j = 0;
+			
+			for (i = 0; i < IENTITIES_ARRAY_SIZE; ++i)
+			{
+				for (j = 0; j < IENTITIES_ARRAY_SIZE; ++j)
+				{
+					if (collisionMatrix[i][j] && (clazz.isInstance(ientities[i]) || clazz.isInstance(ientities[j])))
+						return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	protected void destroy() 
 	{
 		canDestroy = true;

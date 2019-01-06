@@ -106,6 +106,11 @@ public class Entity implements IEntity
 		return level != null ? level.collision(this, ientity) : false;
 	}
 	
+	public boolean collision()
+	{
+		return level != null ? level.collision(this) : false;
+	}
+	
 	public boolean collision(Class<? extends IEntity> clazz)
 	{
 		return level != null ? level.collision(this, clazz) : false;
