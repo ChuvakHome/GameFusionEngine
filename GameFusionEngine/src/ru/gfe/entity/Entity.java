@@ -211,8 +211,6 @@ public class Entity implements IEntity
 		}
 	}
 	
-	public void processCollision(IEntity entity) {}
-	
 	public void update()
 	{
 		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE)
@@ -234,6 +232,16 @@ public class Entity implements IEntity
 			body.setIcon(icon);
 			body.repaint();
 		}
+	}
+	
+	public String getCurrentSequenceName()
+	{
+		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE)
+			return sequences[index].getSequenceName();
+		else if (index == -1)
+			return primarySequence.getSequenceName();
+		else
+			return null;
 	}
 	
 	public void pauseAllSequences()
