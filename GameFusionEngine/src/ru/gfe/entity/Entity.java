@@ -143,7 +143,24 @@ public class Entity implements IEntity
 			return false;
 	}
 	
-	public void destroy() {}
+	public void destroy() 
+	{
+		icon = null;
+		temp = null;
+		
+		body = null;
+		
+		level = null;
+		
+		sequences = null;
+		primarySequence = null;
+		
+		posX = 0;
+		posY = 0;
+		
+		index = 0;
+		id = 0;
+	}
 	
 	public void setPrimarySequence(Sequence primarySequence)
 	{
