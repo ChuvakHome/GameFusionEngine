@@ -145,24 +145,27 @@ public class Entity implements IEntity
 	
 	public void destroy() 
 	{
-		icon = null;
-		temp = null;
-		
-		body = null;
-		
-		level = null;
-		
-		sequences = null;
-		primarySequence = null;
-		
-		posX = 0;
-		posY = 0;
-		
-		index = 0;
-		id = 0;
+		if (canDestroy())
+		{	
+			icon = null;
+			temp = null;
+			
+			body = null;
+			
+			level = null;
+			
+			sequences = null;
+			primarySequence = null;
+			
+			posX = 0;
+			posY = 0;
+			
+			index = 0;
+			id = 0;
+		}
 	}
 	
-	public boolean canDestroy()
+	protected boolean canDestroy()
 	{
 		return level != null && level.canDestroy();
 	}
