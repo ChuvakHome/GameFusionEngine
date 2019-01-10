@@ -1,4 +1,4 @@
-package ru.gfe.entity;
+package ru.gfe.gameobject;
 
 import java.awt.Rectangle;
 
@@ -6,7 +6,7 @@ import javax.swing.JComponent;
 
 import ru.gfe.engine.Level;
 
-public interface IEntity 
+public interface IGameObject 
 {
 	public void update();
 	

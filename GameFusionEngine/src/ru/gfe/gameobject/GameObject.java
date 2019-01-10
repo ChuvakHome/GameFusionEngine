@@ -1,4 +1,4 @@
-package ru.gfe.entity;
+package ru.gfe.gameobject;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -10,7 +10,7 @@ import ru.gfe.engine.Level;
 import ru.gfe.exception.IndexAlreadyInUseException;
 import ru.gfe.sequence.Sequence;
 
-public class Entity implements IEntity 
+public class GameObject implements IGameObject 
 {
 	public static final int SEQUENCE_ARRAY_SIZE = 127;
 	
@@ -29,7 +29,7 @@ public class Entity implements IEntity
 	
 	private Level level;
 	
-	public Entity(JLabel body, Sequence primarySequence, int posX, int posY)
+	public GameObject(JLabel body, Sequence primarySequence, int posX, int posY)
 	{
 		this.body = body;
 		this.primarySequence = primarySequence;
@@ -39,7 +39,7 @@ public class Entity implements IEntity
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
 	}
 	
-	public Entity(JLabel body, int posX, int posY)
+	public GameObject(JLabel body, int posX, int posY)
 	{
 		this.body = body;
 		this.posX = posY;
@@ -61,12 +61,12 @@ public class Entity implements IEntity
 			return null;
 	}
 	
-	public Entity(JLabel body, Sequence primarySequence)
+	public GameObject(JLabel body, Sequence primarySequence)
 	{
 		this(body, primarySequence, body.getX(), body.getY());
 	}
 	
-	public Entity(JLabel body)
+	public GameObject(JLabel body)
 	{
 		this(body, body.getX(), body.getY());
 	}
@@ -101,7 +101,7 @@ public class Entity implements IEntity
 		}
 	}
 	
-	public boolean collision(IEntity ientity)
+	public boolean collision(IGameObject ientity)
 	{
 		return level != null ? level.collision(this, ientity) : false;
 	}
@@ -111,7 +111,7 @@ public class Entity implements IEntity
 		return level != null ? level.collision(this) : false;
 	}
 	
-	public boolean collision(Class<? extends IEntity> clazz)
+	public boolean collision(Class<? extends IGameObject> clazz)
 	{
 		return level != null ? level.collision(this, clazz) : false;
 	}

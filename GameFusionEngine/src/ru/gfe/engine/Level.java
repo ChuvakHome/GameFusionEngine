@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-import ru.gfe.entity.IEntity;
+import ru.gfe.gameobject.IGameObject;
 
 public class Level 
 {
@@ -18,7 +18,7 @@ public class Level
 	
 	private boolean[][] collisionMatrix = new boolean[IENTITIES_ARRAY_SIZE][IENTITIES_ARRAY_SIZE];
 	
-	private IEntity[] ientities = new IEntity[IENTITIES_ARRAY_SIZE];
+	private IGameObject[] ientities = new IGameObject[IENTITIES_ARRAY_SIZE];
 	
 	private int index;
 	
@@ -29,7 +29,7 @@ public class Level
 		return levelContainer;
 	}
 	
-	public boolean addEntity(IEntity ientity)
+	public boolean addEntity(IGameObject ientity)
 	{
 		if (index >= 0 && index < IENTITIES_ARRAY_SIZE && ientity != null && ientity.getLevel() == null)
 		{
@@ -138,12 +138,12 @@ public class Level
 		rect2 = null;
 	}
 	
-	public IEntity[] getIEntityArray()
+	public IGameObject[] getIEntityArray()
 	{
 		return ientities;
 	}
 	
-	public boolean collision(IEntity ientity, Class<? extends IEntity> clazz)
+	public boolean collision(IGameObject ientity, Class<? extends IGameObject> clazz)
 	{
 		if (ientity != null && ientity.getLevel() != null && ientity.getLevel().equals(this) && clazz != null)
 		{
@@ -160,7 +160,7 @@ public class Level
 		return false;
 	}
 	
-	public boolean collision(Class<? extends IEntity> clazz1, Class<? extends IEntity> clazz2)
+	public boolean collision(Class<? extends IGameObject> clazz1, Class<? extends IGameObject> clazz2)
 	{
 		if (clazz1 != null && clazz2 != null)
 		{
@@ -186,7 +186,7 @@ public class Level
 	 * @param ientity
 	 * @return
 	 */
-	public boolean collision(IEntity ientity)
+	public boolean collision(IGameObject ientity)
 	{
 		if (ientity != null && ientity.getLevel() != null && ientity.getLevel().equals(this))
 		{
@@ -208,7 +208,7 @@ public class Level
 	 * @param ientity
 	 * @return
 	 */
-	public boolean collision(Class<? extends IEntity> clazz)
+	public boolean collision(Class<? extends IGameObject> clazz)
 	{
 		if (clazz != null)
 		{
@@ -253,7 +253,7 @@ public class Level
 		return canDestroy;
 	}
 	
-	public boolean collision(IEntity ientity1, IEntity ientity2)
+	public boolean collision(IGameObject ientity1, IGameObject ientity2)
 	{
 		if (ientity1 != null && ientity2 != null && !ientity1.equals(ientity2) && ientity1.getLevel() != null && ientity1.getLevel().equals(this) && ientity2.getLevel() != null 
 			&& ientity2.getLevel().equals(this))

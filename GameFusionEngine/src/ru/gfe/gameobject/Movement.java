@@ -1,4 +1,4 @@
-package ru.gfe.entity;
+package ru.gfe.gameobject;
 
 public enum Movement 
 {
