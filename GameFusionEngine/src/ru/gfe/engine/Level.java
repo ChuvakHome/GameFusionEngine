@@ -20,7 +20,7 @@ public class Level
 	
 	private IGameObject[] ientities = new IGameObject[IENTITIES_ARRAY_SIZE];
 	
-	private int index;
+	private int freeId;
 	
 	private boolean canDestroy;
 	
@@ -31,13 +31,13 @@ public class Level
 	
 	public boolean addEntity(IGameObject ientity)
 	{
-		if (index >= 0 && index < IENTITIES_ARRAY_SIZE && ientity != null && ientity.getLevel() == null)
+		if (freeId >= 0 && freeId < IENTITIES_ARRAY_SIZE && ientity != null && ientity.getLevel() == null)
 		{
-			ientities[index] = ientity;
+			ientities[freeId] = ientity;
 			
-			levelContainer.add(ientities[index].getVisual());
+			levelContainer.add(ientities[freeId].getVisual());
 			
-			ientity.setLevel(this, index++);
+			ientity.setLevel(this, freeId++);
 			
 			return true;
 		}
@@ -71,7 +71,7 @@ public class Level
 
 		Component temp;
 		
-		for (i = 0; i <= index; ++i)
+		for (i = 0; i <= freeId; ++i)
 		{
 			if (ientities[i] != null)
 			{
@@ -94,7 +94,7 @@ public class Level
 		Rectangle rect1;
 		Rectangle rect2;
 		
-		for (i = 0; i <= index; ++i)
+		for (i = 0; i <= freeId; ++i)
 		{
 			if (ientities[i] != null)
 			{
@@ -102,7 +102,7 @@ public class Level
 			
 				rect1 = ientities[i].getRect();
 				
-				for (j = 0; j <= index; ++j)
+				for (j = 0; j <= freeId; ++j)
 				{
 					if (ientities[j] != null)
 					{
