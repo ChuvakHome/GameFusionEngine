@@ -62,7 +62,7 @@ public class Sequence
 		this(getImages(directory));
 	}
   
-	public Sequence(Image[] imgs)
+	public Sequence(Image... imgs)
 	{
 		loadFrames(imgs);
 	}
@@ -146,7 +146,7 @@ public class Sequence
 		loadFrames(getImages(directory));
 	}
   
-	public void loadFrames(Image[] imgs)
+	public void loadFrames(Image... imgs)
 	{
 		if (imgs != null)
 			frames = imgs;
