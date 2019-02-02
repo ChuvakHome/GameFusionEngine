@@ -27,7 +27,7 @@ public class GameObject implements IGameObject
 	private int index = -1;
 	protected int id = -1;
 	
-	private Level level;
+	protected Level level;
 	
 	public GameObject(Level level, int idOnLevel, JLabel body, Sequence primarySequence, int posX, int posY)
 	{
