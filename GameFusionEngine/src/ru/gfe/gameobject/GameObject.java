@@ -29,23 +29,33 @@ public class GameObject implements IGameObject
 	
 	private Level level;
 	
-	public GameObject(JLabel body, Sequence primarySequence, int posX, int posY)
+	public GameObject(Level level, int idOnLevel, JLabel body, Sequence primarySequence, int posX, int posY)
 	{
+		if (level == null)
+			throw new NullPointerException("Level cannot be null");
+		
 		this.body = body;
 		this.primarySequence = primarySequence;
 		this.posX = posY;
 		this.posY = posY;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
+		
+		setLevel(level, idOnLevel);
 	}
 	
-	public GameObject(JLabel body, int posX, int posY)
+	public GameObject(Level level, int idOnLevel, JLabel body, int posX, int posY)
 	{
+		if (level == null)
+			throw new NullPointerException("Level cannot be null");
+		
 		this.body = body;
 		this.posX = posY;
 		this.posY = posY;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
+		
+		setLevel(level, idOnLevel);
 	}
 	
 	public JLabel getVisual()
@@ -61,14 +71,14 @@ public class GameObject implements IGameObject
 			return null;
 	}
 	
-	public GameObject(JLabel body, Sequence primarySequence)
+	public GameObject(Level level, int idOnLevel, JLabel body, Sequence primarySequence)
 	{
-		this(body, primarySequence, body.getX(), body.getY());
+		this(level, idOnLevel, body, primarySequence, body.getX(), body.getY());
 	}
 	
-	public GameObject(JLabel body)
+	public GameObject(Level level, int idOnLevel, JLabel body)
 	{
-		this(body, body.getX(), body.getY());
+		this(level, idOnLevel, body, body.getX(), body.getY());
 	}
 	
 	public void setBody(JLabel body)
@@ -83,12 +93,10 @@ public class GameObject implements IGameObject
 	
 	public void setLevel(Level level, int id)
 	{
-		if (level != null && this.level == null && id >= 0 && this.id < 0)
+		if (level != null && id >= 0)
 		{
 			this.level = level;
 			this.id = id;
-			
-			destroy();
 		}
 	}
 	
@@ -190,7 +198,7 @@ public class GameObject implements IGameObject
 	
 	protected boolean canDestroy()
 	{
-		return level != null && level.canDestroy();
+		return (level != null && level.canDestroy()) || level == null;
 	}
 	
 	protected void destroyAllSequence()
