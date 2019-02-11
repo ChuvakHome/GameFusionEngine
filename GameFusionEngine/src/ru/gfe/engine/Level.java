@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
+import ru.gfe.event.Event;
 import ru.gfe.gameobject.IGameObject;
 
 public class Level 
@@ -18,9 +19,9 @@ public class Level
 	
 	private boolean[][] collisionMatrix = new boolean[IENTITIES_ARRAY_SIZE][IENTITIES_ARRAY_SIZE];
 	
-	private IGameObject[] ientities = new IGameObject[IENTITIES_ARRAY_SIZE];
+	protected IGameObject[] ientities = new IGameObject[IENTITIES_ARRAY_SIZE];
 	
-	private int freeId;
+	protected int freeId;
 	
 	private boolean canDestroy;
 	
@@ -29,7 +30,7 @@ public class Level
 		return levelContainer;
 	}
 	
-	public boolean addEntity(IGameObject ientity)
+	public boolean addGameObject(IGameObject ientity)
 	{
 		if (freeId >= 0 && freeId < IENTITIES_ARRAY_SIZE && ientity != null && ientity.getLevel() == null)
 		{
@@ -45,7 +46,7 @@ public class Level
 			return false;
 	}
 	
-	public void removeEntity(int id)
+	public void removeGameObject(int id)
 	{
 		if (id >= 0)
 		{
@@ -267,6 +268,8 @@ public class Level
 	public void processMouseEvent(MouseEvent e) {}
 
 	public void processMouseMotionEvent(MouseEvent e) {}
+	
+	public void processEvent(Event e) {}
 	
 	public void processMouseWheelEvent(MouseWheelEvent e) {}
 	

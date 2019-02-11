@@ -1,6 +1,6 @@
 package ru.gfe.handler;
 
-import ru.gfe.engine.Event;
+import ru.gfe.event.Event;
 
 public abstract class EngineHandler 
 {
@@ -8,5 +8,5 @@ public abstract class EngineHandler
 
 	public abstract void exit();
 	
-	public abstract<E extends Event> void processEvent(E e);
+	public abstract void processEvent(Event e);
 }

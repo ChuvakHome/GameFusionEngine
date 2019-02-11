@@ -2,15 +2,15 @@ package ru.gfe.engine;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.lang.reflect.Constructor;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.gfe.display.Display;
+import ru.gfe.event.Event;
 import ru.gfe.handler.EngineHandler;
 import ru.gfe.handler.KeyHandler;
 import ru.gfe.handler.MouseHandler;
@@ -19,7 +19,6 @@ import ru.gfe.handler.SoundHandler;
 public final class GameFusionEngine 
 {
 	private static Display display;
-	private static Image image;
 	
 	private static Timer timer;
 	
@@ -30,10 +29,14 @@ public final class GameFusionEngine
 	private static boolean started;
 	private static boolean updateLevel;
 	
-	private static int imageX, imageY;
 	private static long timeOnLevel;
 	
 	private static Level currentLevel;
+	
+	private static Class<? extends Display> displayClazz;
+	private static Object[] args;
+	
+	private static boolean displayChanged;
 	
 	private GameFusionEngine() {}
 	
@@ -52,14 +55,27 @@ public final class GameFusionEngine
 		return display.getHeight();
 	}
 	
+	public static void setDisplay(Class<? extends Display> clazz, Object... initargs)
+	{
+		if (clazz != null && !started)
+		{
+			displayClazz = clazz;
+			args = initargs;
+			displayChanged = true;
+		}
+	}
+	
 	public static void setKeyHandler(KeyHandler handler)
 	{
 		keyHandler = handler;
 	}
 	
-	public static<E extends Event> void processEvent(E e)
+	public static void processEvent(Event e)
 	{
-		engineHandler.processEvent(e);
+		if (engineHandler != null)	
+			engineHandler.processEvent(e);
+		if (currentLevel != null)
+			currentLevel.processEvent(e);
 	}
 	
 	public static void setMouseHandler(MouseHandler handler)
@@ -132,9 +148,6 @@ public final class GameFusionEngine
 			currentLevel.destroy();
 			currentLevel = level;
 			
-			if (removeFrameImage)
-				removeFrameImage();
-			
 			display.setVisible(false);
 			
 			currentLevel.init();	
@@ -166,40 +179,6 @@ public final class GameFusionEngine
 	public static boolean isStarted()
 	{
 		return started;
-	}
-	
-	public static void setFrameImage(Image img, int posX, int posY)
-	{
-		image = img;
-		imageX = posX;
-		imageY = posY;
-		display.repaint();
-	}
-	
-	public static void setFrameImage(Image img)
-	{
-		setFrameImage(img, 0, 0);
-	}
-	
-	public static void removeFrameImage()
-	{
-		image = null;
-		display.repaint();
-	}
-	
-	public static Image getFrameImage()
-	{
-		return image;
-	}
-	
-	public static int getImageX()
-	{
-		return imageX;
-	}
-	
-	public static int getImageY()
-	{
-		return imageY;
 	}
 	
 	public static void setPrimaryLevel(String name)
@@ -238,19 +217,31 @@ public final class GameFusionEngine
 		launch(dimension.width, dimension.height, undecorated);
 	}
 	
+	private static void createDisplay()
+	{
+		if (displayChanged)
+		{
+			try
+			{
+				for (Constructor<?> contructor: displayClazz.getConstructors())
+				{
+					Object temp = contructor.newInstance(args);
+					
+					if (temp != null)
+						display = (Display) temp;
+				}
+			} catch (Exception e) {}
+		}
+		else
+			display = new Display((boolean) args[0]);
+	}
+	
 	public static void launch(int width, int height, boolean undecorated)
 	{	
-		display = new Display(undecorated)
-		{
-			private static final long serialVersionUID = 6209237097299496909L;
-			
-			public void paint(Graphics g)
-			{
-				super.paint(g);
-				
-				g.drawImage(image, imageX, imageY, null);
-			}
-		};
+		if (!displayChanged)
+			args = new Object[]{undecorated};
+		
+		createDisplay();
 		
 		display.setSize(width, height);
 		display.setLocationRelativeTo(null);

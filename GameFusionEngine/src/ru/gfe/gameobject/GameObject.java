@@ -29,33 +29,23 @@ public class GameObject implements IGameObject
 	
 	protected Level level;
 	
-	public GameObject(Level level, int idOnLevel, JLabel body, Sequence primarySequence, int posX, int posY)
+	public GameObject(JLabel body, Sequence primarySequence, int posX, int posY)
 	{
-		if (level == null)
-			throw new NullPointerException("Level cannot be null");
-		
 		this.body = body;
 		this.primarySequence = primarySequence;
 		this.posX = posY;
 		this.posY = posY;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
-		
-		setLevel(level, idOnLevel);
 	}
 	
-	public GameObject(Level level, int idOnLevel, JLabel body, int posX, int posY)
+	public GameObject(JLabel body, int posX, int posY)
 	{
-		if (level == null)
-			throw new NullPointerException("Level cannot be null");
-		
 		this.body = body;
 		this.posX = posY;
 		this.posY = posY;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
-		
-		setLevel(level, idOnLevel);
 	}
 	
 	public JLabel getVisual()
@@ -71,14 +61,14 @@ public class GameObject implements IGameObject
 			return null;
 	}
 	
-	public GameObject(Level level, int idOnLevel, JLabel body, Sequence primarySequence)
+	public GameObject(JLabel body, Sequence primarySequence)
 	{
-		this(level, idOnLevel, body, primarySequence, body.getX(), body.getY());
+		this(body, primarySequence, body.getX(), body.getY());
 	}
 	
-	public GameObject(Level level, int idOnLevel, JLabel body)
+	public GameObject(JLabel body)
 	{
-		this(level, idOnLevel, body, body.getX(), body.getY());
+		this(body, body.getX(), body.getY());
 	}
 	
 	public void setBody(JLabel body)
