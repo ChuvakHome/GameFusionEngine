@@ -160,30 +160,33 @@ public class GameObject implements IGameObject
 	public void destroy() 
 	{
 		if (canDestroy())
-		{	
-			icon = null;
-			temp = null;
-			
-			body = null;
-			
-			level = null;
-			
-			destroyAllSequence();
-			
-			sequences = null;
-			
-			if (primarySequence != null)
-			{
-				primarySequence.destroy();
-				primarySequence = null;
-			}
-			
-			posX = 0;
-			posY = 0;
-			
-			index = 0;
-			id = 0;
+			destroyData();
+	}
+	
+	protected void destroyData()
+	{
+		icon = null;
+		temp = null;
+		
+		body = null;
+		
+		level = null;
+		
+		destroyAllSequence();
+		
+		sequences = null;
+		
+		if (primarySequence != null)
+		{
+			primarySequence.destroy();
+			primarySequence = null;
 		}
+		
+		posX = 0;
+		posY = 0;
+		
+		index = 0;
+		id = 0;
 	}
 	
 	protected boolean canDestroy()
