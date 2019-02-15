@@ -299,9 +299,12 @@ public class GameObject implements IGameObject
 		}
 		else if (index == -1)
 		{
-			primarySequence.update();
-			
-			temp = primarySequence.getCurrentFrame();
+			if (primarySequence != null)
+			{	
+				primarySequence.update();
+				
+				temp = primarySequence.getCurrentFrame();
+			}
 		}
 		
 		if (temp != null && (icon == null || !icon.equals(temp)))
