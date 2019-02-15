@@ -25,7 +25,7 @@ public class Level
 	
 	private boolean canDestroy;
 	
-	protected int zOrder = 1;
+	protected int zOrder;
 	
 	public Container getLevelContainer()
 	{
@@ -284,7 +284,10 @@ public class Level
 	
 	public void setIGameObjectZOrder(int zOrder)
 	{
-		this.zOrder = zOrder;
+		if (zOrder >= 0)
+			this.zOrder = zOrder;
+		else
+			throw new NumberFormatException("ZOrder cannot be negative");
 	}
 	
 	public int getIGameObjectZOrder()
