@@ -101,7 +101,7 @@ public class Level
 			{
 				iGameObjects[i].update();
 			
-				if (iGameObjects[i].isActive())
+				if (iGameObjects[i] != null && iGameObjects[i].isActive())
 				{	
 					rect1 = iGameObjects[i].getRect();
 					
