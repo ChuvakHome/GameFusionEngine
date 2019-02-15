@@ -19,7 +19,7 @@ public class Level
 	
 	private boolean[][] collisionMatrix = new boolean[IENTITIES_ARRAY_SIZE][IENTITIES_ARRAY_SIZE];
 	
-	protected IGameObject[] ientities = new IGameObject[IENTITIES_ARRAY_SIZE];
+	protected IGameObject[] iGameObjects = new IGameObject[IENTITIES_ARRAY_SIZE];
 	
 	protected int freeId;
 	
@@ -34,9 +34,9 @@ public class Level
 	{
 		if (freeId >= 0 && freeId < IENTITIES_ARRAY_SIZE && ientity != null && ientity.getLevel() == null)
 		{
-			ientities[freeId] = ientity;
+			iGameObjects[freeId] = ientity;
 			
-			levelContainer.add(ientities[freeId].getVisual());
+			levelContainer.add(iGameObjects[freeId].getVisual());
 			
 			ientity.setLevel(this, freeId++);
 			
@@ -50,10 +50,10 @@ public class Level
 	{
 		if (id >= 0)
 		{
-			if (ientities[id] != null && ientities[id].getLevel() != null && ientities[id].getLevel().equals(this))
+			if (iGameObjects[id] != null && iGameObjects[id].getLevel() != null && iGameObjects[id].getLevel().equals(this))
 			{
-				ientities[id].removeLevel(this, id);
-				ientities[id] = null;
+				iGameObjects[id].removeLevel(this, id);
+				iGameObjects[id] = null;
 				levelContainer.remove(id);
 			}
 		}
@@ -74,12 +74,12 @@ public class Level
 		
 		for (i = 0; i <= freeId; ++i)
 		{
-			if (ientities[i] != null)
+			if (iGameObjects[i] != null)
 			{
 				temp = levelContainer.getComponent(i);
 				
-				ientities[i].setX(temp.getX());
-				ientities[i].setY(temp.getY());
+				iGameObjects[i].setX(temp.getX());
+				iGameObjects[i].setY(temp.getY());
 			}
 		}
 		
@@ -97,33 +97,36 @@ public class Level
 		
 		for (i = 0; i <= freeId; ++i)
 		{
-			if (ientities[i] != null)
+			if (iGameObjects[i] != null)
 			{
-				ientities[i].update();
+				iGameObjects[i].update();
 			
-				rect1 = ientities[i].getRect();
-				
-				for (j = 0; j <= freeId; ++j)
-				{
-					if (ientities[j] != null)
+				if (iGameObjects[i].isActive())
+				{	
+					rect1 = iGameObjects[i].getRect();
+					
+					for (j = 0; j <= freeId; ++j)
 					{
-						if (i >= j)
-							collisionMatrix[i][i] = false;
-						else
+						if (iGameObjects[j] != null)
 						{
-							rect2 = ientities[j].getRect();
-								
-							if (rect1 != null && rect2 != null)
+							if (i >= j)
+								collisionMatrix[i][i] = false;
+							else
 							{
-								if (!collisionMatrix[i][j] && rect1.intersects(rect2))
+								rect2 = iGameObjects[j].getRect();
+									
+								if (rect1 != null && rect2 != null)
 								{
-									collisionMatrix[i][j] = true;
-									collisionMatrix[j][i] = true;
-								}
-								else if (collisionMatrix[i][j] && !rect1.intersects(rect2))
-								{
-									collisionMatrix[i][j] = false;
-									collisionMatrix[j][i] = false;
+									if (!collisionMatrix[i][j] && rect1.intersects(rect2))
+									{
+										collisionMatrix[i][j] = true;
+										collisionMatrix[j][i] = true;
+									}
+									else if (collisionMatrix[i][j] && !rect1.intersects(rect2))
+									{
+										collisionMatrix[i][j] = false;
+										collisionMatrix[j][i] = false;
+									}
 								}
 							}
 						}
@@ -139,9 +142,9 @@ public class Level
 		rect2 = null;
 	}
 	
-	public IGameObject[] getIEntityArray()
+	public IGameObject[] getIGameObjectArray()
 	{
-		return ientities;
+		return iGameObjects;
 	}
 	
 	public boolean collision(IGameObject ientity, Class<? extends IGameObject> clazz)
@@ -153,7 +156,7 @@ public class Level
 		
 			for (j = 0; j < IENTITIES_ARRAY_SIZE; ++j)
 			{
-				if (collisionMatrix[i][j] && clazz.isInstance(ientities[j]))
+				if (collisionMatrix[i][j] && clazz.isInstance(iGameObjects[j]))
 					return true;
 			}
 		}
@@ -172,8 +175,8 @@ public class Level
 			{
 				for (j = 0; j < IENTITIES_ARRAY_SIZE; ++j)
 				{
-					if (collisionMatrix[i][j] && (clazz1.isInstance(ientities[i]) && clazz2.isInstance(ientities[j]) || 
-							clazz1.isInstance(ientities[j]) && clazz2.isInstance(ientities[i])))
+					if (collisionMatrix[i][j] && (clazz1.isInstance(iGameObjects[i]) && clazz2.isInstance(iGameObjects[j]) || 
+							clazz1.isInstance(iGameObjects[j]) && clazz2.isInstance(iGameObjects[i])))
 							return true;
 				}
 			}
@@ -220,7 +223,7 @@ public class Level
 			{
 				for (j = 0; j < IENTITIES_ARRAY_SIZE; ++j)
 				{
-					if (collisionMatrix[i][j] && (clazz.isInstance(ientities[i]) || clazz.isInstance(ientities[j])))
+					if (collisionMatrix[i][j] && (clazz.isInstance(iGameObjects[i]) || clazz.isInstance(iGameObjects[j])))
 						return true;
 				}
 			}
@@ -242,8 +245,8 @@ public class Level
 		
 		for (i = 0; i < IENTITIES_ARRAY_SIZE; ++i)
 		{
-			if (ientities[i] != null)	
-				ientities[i].destroy();
+			if (iGameObjects[i] != null)	
+				iGameObjects[i].destroy();
 		}
 		
 		i = 0;

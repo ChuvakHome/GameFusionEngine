@@ -468,4 +468,9 @@ public class GameObject implements IGameObject
 	{
 		return id;
 	}
+
+	public boolean isActive() 
+	{
+		return true;
+	}
 }

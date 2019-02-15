@@ -31,4 +31,6 @@ public interface IGameObject
 	public Rectangle getRect();
 	
 	public void destroy();
+	
+	public boolean isActive();
 }
