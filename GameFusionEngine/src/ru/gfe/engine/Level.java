@@ -107,7 +107,7 @@ public class Level
 					
 					for (j = 0; j <= freeId; ++j)
 					{
-						if (iGameObjects[j] != null)
+						if (iGameObjects[j] != null && iGameObjects[j].isActive())
 						{
 							if (i >= j)
 								collisionMatrix[i][i] = false;
