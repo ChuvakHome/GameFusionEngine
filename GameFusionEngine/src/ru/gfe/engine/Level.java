@@ -34,12 +34,19 @@ public class Level
 	
 	public boolean addGameObject(IGameObject iGameObject)
 	{
+		return addGameObject(iGameObject, true);
+	}
+	
+	public boolean addGameObject(IGameObject iGameObject, boolean setDefaultZOrder)
+	{
 		if (freeId >= 0 && freeId < IENTITIES_ARRAY_SIZE && iGameObject != null && iGameObject.getLevel() == null)
 		{
 			iGameObjects[freeId] = iGameObject;
 			
 			levelContainer.add(iGameObjects[freeId].getVisual());
-			levelContainer.setComponentZOrder(iGameObjects[freeId].getVisual(), zOrder);
+			
+			if (setDefaultZOrder)	
+				levelContainer.setComponentZOrder(iGameObjects[freeId].getVisual(), zOrder);
 			
 			iGameObject.setLevel(this, freeId++);
 			
