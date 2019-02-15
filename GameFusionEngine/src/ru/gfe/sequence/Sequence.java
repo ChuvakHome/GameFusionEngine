@@ -215,7 +215,6 @@ public class Sequence
 	
 	public void stop()
 	{
-		start = false;
 		end = true;
 	}
   
