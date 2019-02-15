@@ -160,10 +160,10 @@ public class GameObject implements IGameObject
 	public void destroy() 
 	{
 		if (canDestroy())
-			destroyData();
+			destroyGameObject();
 	}
 	
-	protected void destroyData()
+	protected void destroyGameObject()
 	{
 		icon = null;
 		temp = null;
