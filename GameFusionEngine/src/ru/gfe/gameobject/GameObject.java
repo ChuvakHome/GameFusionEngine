@@ -473,4 +473,6 @@ public class GameObject implements IGameObject
 	{
 		return true;
 	}
+	
+	public void processCollision(IGameObject iGameObject) {}
 }

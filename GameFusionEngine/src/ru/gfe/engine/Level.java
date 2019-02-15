@@ -121,6 +121,9 @@ public class Level
 									{
 										collisionMatrix[i][j] = true;
 										collisionMatrix[j][i] = true;
+										
+										iGameObjects[i].processCollision(iGameObjects[j]);
+										iGameObjects[j].processCollision(iGameObjects[i]);
 									}
 									else if (collisionMatrix[i][j] && !rect1.intersects(rect2))
 									{
