@@ -157,6 +157,22 @@ public class GameObject implements IGameObject
 			return false;
 	}
 	
+	public boolean currentSequenceEnded()
+	{
+		if (index > 0)
+			return sequences[index].framesSequenceEnd();
+		else
+			return primarySequence.framesSequenceEnd();
+	}
+	
+	public boolean currentSequenceStarted()
+	{
+		if (index > 0)
+			return sequences[index].isStarted();
+		else
+			return primarySequence.isStarted();
+	}
+	
 	public void destroy() 
 	{
 		if (canDestroy())
