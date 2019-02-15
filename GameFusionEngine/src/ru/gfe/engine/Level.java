@@ -25,20 +25,23 @@ public class Level
 	
 	private boolean canDestroy;
 	
+	protected int zOrder = 1;
+	
 	public Container getLevelContainer()
 	{
 		return levelContainer;
 	}
 	
-	public boolean addGameObject(IGameObject ientity)
+	public boolean addGameObject(IGameObject iGameObject)
 	{
-		if (freeId >= 0 && freeId < IENTITIES_ARRAY_SIZE && ientity != null && ientity.getLevel() == null)
+		if (freeId >= 0 && freeId < IENTITIES_ARRAY_SIZE && iGameObject != null && iGameObject.getLevel() == null)
 		{
-			iGameObjects[freeId] = ientity;
+			iGameObjects[freeId] = iGameObject;
 			
 			levelContainer.add(iGameObjects[freeId].getVisual());
+			levelContainer.setComponentZOrder(iGameObjects[freeId].getVisual(), zOrder);
 			
-			ientity.setLevel(this, freeId++);
+			iGameObject.setLevel(this, freeId++);
 			
 			return true;
 		}
@@ -278,6 +281,16 @@ public class Level
 	public void processEvent(Event e) {}
 	
 	public void processMouseWheelEvent(MouseWheelEvent e) {}
+	
+	public void setIGameObjectZOrder(int zOrder)
+	{
+		this.zOrder = zOrder;
+	}
+	
+	public int getIGameObjectZOrder()
+	{
+		return zOrder;
+	}
 	
 	public final long getTimeOnLevel()
 	{
