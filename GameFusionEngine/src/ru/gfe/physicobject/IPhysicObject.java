@@ -1,4 +1,4 @@
-package ru.gfe.gameobject;
+package ru.gfe.physicobject;
 
 import java.awt.Rectangle;
 
@@ -6,7 +6,7 @@ import javax.swing.JComponent;
 
 import ru.gfe.engine.Level;
 
-public interface IGameObject 
+public interface IPhysicObject 
 {
 	public void update();
 	
@@ -34,5 +34,5 @@ public interface IGameObject
 	
 	public boolean isActive();
 	
-	public void processCollision(IGameObject iGameObject);
+	public void processCollision(IPhysicObject iGameObject);
 }

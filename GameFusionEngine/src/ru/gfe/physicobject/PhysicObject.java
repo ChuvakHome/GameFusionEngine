@@ -1,4 +1,4 @@
-package ru.gfe.gameobject;
+package ru.gfe.physicobject;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -10,7 +10,7 @@ import ru.gfe.engine.Level;
 import ru.gfe.exception.IndexAlreadyInUseException;
 import ru.gfe.sequence.Sequence;
 
-public class GameObject implements IGameObject 
+public class PhysicObject implements IPhysicObject 
 {
 	public static final int SEQUENCE_ARRAY_SIZE = 127;
 	
@@ -29,7 +29,7 @@ public class GameObject implements IGameObject
 	
 	protected Level level;
 	
-	public GameObject(JLabel body, Sequence primarySequence, int posX, int posY)
+	public PhysicObject(JLabel body, Sequence primarySequence, int posX, int posY)
 	{
 		this.body = body;
 		this.primarySequence = primarySequence;
@@ -39,7 +39,7 @@ public class GameObject implements IGameObject
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
 	}
 	
-	public GameObject(JLabel body, int posX, int posY)
+	public PhysicObject(JLabel body, int posX, int posY)
 	{
 		this.body = body;
 		this.posX = posY;
@@ -61,12 +61,12 @@ public class GameObject implements IGameObject
 			return null;
 	}
 	
-	public GameObject(JLabel body, Sequence primarySequence)
+	public PhysicObject(JLabel body, Sequence primarySequence)
 	{
 		this(body, primarySequence, body.getX(), body.getY());
 	}
 	
-	public GameObject(JLabel body)
+	public PhysicObject(JLabel body)
 	{
 		this(body, body.getX(), body.getY());
 	}
@@ -99,7 +99,7 @@ public class GameObject implements IGameObject
 		}
 	}
 	
-	public boolean collision(IGameObject ientity)
+	public boolean collision(IPhysicObject ientity)
 	{
 		return level != null ? level.collision(this, ientity) : false;
 	}
@@ -109,7 +109,7 @@ public class GameObject implements IGameObject
 		return level != null ? level.collision(this) : false;
 	}
 	
-	public boolean collision(Class<? extends IGameObject> clazz)
+	public boolean collision(Class<? extends IPhysicObject> clazz)
 	{
 		return level != null ? level.collision(this, clazz) : false;
 	}
@@ -477,5 +477,5 @@ public class GameObject implements IGameObject
 		return true;
 	}
 	
-	public void processCollision(IGameObject iGameObject) {}
+	public void processCollision(IPhysicObject iGameObject) {}
 }

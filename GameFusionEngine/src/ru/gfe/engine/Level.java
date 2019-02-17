@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 import ru.gfe.event.Event;
-import ru.gfe.gameobject.IGameObject;
+import ru.gfe.physicobject.IPhysicObject;
 
 public class Level 
 {
@@ -19,7 +19,7 @@ public class Level
 	
 	private boolean[][] collisionMatrix = new boolean[IENTITIES_ARRAY_SIZE][IENTITIES_ARRAY_SIZE];
 	
-	protected IGameObject[] iGameObjects = new IGameObject[IENTITIES_ARRAY_SIZE];
+	protected IPhysicObject[] iPhysicObjects = new IPhysicObject[IENTITIES_ARRAY_SIZE];
 	
 	protected int freeId;
 	
@@ -32,21 +32,21 @@ public class Level
 		return levelContainer;
 	}
 	
-	public boolean addGameObject(IGameObject iGameObject)
+	public boolean addGameObject(IPhysicObject iGameObject)
 	{
 		return addGameObject(iGameObject, true);
 	}
 	
-	public boolean addGameObject(IGameObject iGameObject, boolean setDefaultZOrder)
+	public boolean addGameObject(IPhysicObject iGameObject, boolean setDefaultZOrder)
 	{
 		if (freeId >= 0 && freeId < IENTITIES_ARRAY_SIZE && iGameObject != null && iGameObject.getLevel() == null)
 		{
-			iGameObjects[freeId] = iGameObject;
+			iPhysicObjects[freeId] = iGameObject;
 			
-			levelContainer.add(iGameObjects[freeId].getVisual());
+			levelContainer.add(iPhysicObjects[freeId].getVisual());
 			
 			if (setDefaultZOrder)	
-				levelContainer.setComponentZOrder(iGameObjects[freeId].getVisual(), zOrder);
+				levelContainer.setComponentZOrder(iPhysicObjects[freeId].getVisual(), zOrder);
 			
 			iGameObject.setLevel(this, freeId++);
 			
@@ -60,11 +60,11 @@ public class Level
 	{
 		if (id >= 0)
 		{
-			if (iGameObjects[id] != null && iGameObjects[id].getLevel() != null && iGameObjects[id].getLevel().equals(this))
+			if (iPhysicObjects[id] != null && iPhysicObjects[id].getLevel() != null && iPhysicObjects[id].getLevel().equals(this))
 			{
-				iGameObjects[id].removeLevel(this, id);
-				iGameObjects[id] = null;
-				levelContainer.remove(id);
+				iPhysicObjects[id].removeLevel(this, id);
+				levelContainer.remove(iPhysicObjects[id].getVisual());
+				iPhysicObjects[id] = null;
 			}
 		}
 	}
@@ -84,12 +84,12 @@ public class Level
 		
 		for (i = 0; i <= freeId; ++i)
 		{
-			if (iGameObjects[i] != null)
+			if (iPhysicObjects[i] != null)
 			{
 				temp = levelContainer.getComponent(i);
 				
-				iGameObjects[i].setX(temp.getX());
-				iGameObjects[i].setY(temp.getY());
+				iPhysicObjects[i].setX(temp.getX());
+				iPhysicObjects[i].setY(temp.getY());
 			}
 		}
 		
@@ -107,23 +107,23 @@ public class Level
 		
 		for (i = 0; i <= freeId; ++i)
 		{
-			if (iGameObjects[i] != null)
+			if (iPhysicObjects[i] != null)
 			{
-				iGameObjects[i].update();
+				iPhysicObjects[i].update();
 			
-				if (iGameObjects[i] != null && iGameObjects[i].isActive())
+				if (iPhysicObjects[i] != null && iPhysicObjects[i].isActive())
 				{	
-					rect1 = iGameObjects[i].getRect();
+					rect1 = iPhysicObjects[i].getRect();
 					
 					for (j = 0; j <= freeId; ++j)
 					{
-						if (iGameObjects[j] != null && iGameObjects[j].isActive())
+						if (iPhysicObjects[j] != null && iPhysicObjects[j].isActive())
 						{
 							if (i >= j)
 								collisionMatrix[i][i] = false;
 							else
 							{
-								rect2 = iGameObjects[j].getRect();
+								rect2 = iPhysicObjects[j].getRect();
 									
 								if (rect1 != null && rect2 != null)
 								{
@@ -132,8 +132,8 @@ public class Level
 										collisionMatrix[i][j] = true;
 										collisionMatrix[j][i] = true;
 										
-										iGameObjects[i].processCollision(iGameObjects[j]);
-										iGameObjects[j].processCollision(iGameObjects[i]);
+										iPhysicObjects[i].processCollision(iPhysicObjects[j]);
+										iPhysicObjects[j].processCollision(iPhysicObjects[i]);
 									}
 									else if (collisionMatrix[i][j] && !rect1.intersects(rect2))
 									{
@@ -155,12 +155,12 @@ public class Level
 		rect2 = null;
 	}
 	
-	public IGameObject[] getIGameObjectArray()
+	public IPhysicObject[] getIGameObjectArray()
 	{
-		return iGameObjects;
+		return iPhysicObjects;
 	}
 	
-	public boolean collision(IGameObject ientity, Class<? extends IGameObject> clazz)
+	public boolean collision(IPhysicObject ientity, Class<? extends IPhysicObject> clazz)
 	{
 		if (ientity != null && ientity.getLevel() != null && ientity.getLevel().equals(this) && clazz != null)
 		{
@@ -169,7 +169,7 @@ public class Level
 		
 			for (j = 0; j < IENTITIES_ARRAY_SIZE; ++j)
 			{
-				if (collisionMatrix[i][j] && clazz.isInstance(iGameObjects[j]))
+				if (collisionMatrix[i][j] && clazz.isInstance(iPhysicObjects[j]))
 					return true;
 			}
 		}
@@ -177,7 +177,7 @@ public class Level
 		return false;
 	}
 	
-	public boolean collision(Class<? extends IGameObject> clazz1, Class<? extends IGameObject> clazz2)
+	public boolean collision(Class<? extends IPhysicObject> clazz1, Class<? extends IPhysicObject> clazz2)
 	{
 		if (clazz1 != null && clazz2 != null)
 		{
@@ -188,8 +188,8 @@ public class Level
 			{
 				for (j = 0; j < IENTITIES_ARRAY_SIZE; ++j)
 				{
-					if (collisionMatrix[i][j] && (clazz1.isInstance(iGameObjects[i]) && clazz2.isInstance(iGameObjects[j]) || 
-							clazz1.isInstance(iGameObjects[j]) && clazz2.isInstance(iGameObjects[i])))
+					if (collisionMatrix[i][j] && (clazz1.isInstance(iPhysicObjects[i]) && clazz2.isInstance(iPhysicObjects[j]) || 
+							clazz1.isInstance(iPhysicObjects[j]) && clazz2.isInstance(iPhysicObjects[i])))
 							return true;
 				}
 			}
@@ -203,7 +203,7 @@ public class Level
 	 * @param ientity
 	 * @return
 	 */
-	public boolean collision(IGameObject ientity)
+	public boolean collision(IPhysicObject ientity)
 	{
 		if (ientity != null && ientity.getLevel() != null && ientity.getLevel().equals(this))
 		{
@@ -225,7 +225,7 @@ public class Level
 	 * @param ientity
 	 * @return
 	 */
-	public boolean collision(Class<? extends IGameObject> clazz)
+	public boolean collision(Class<? extends IPhysicObject> clazz)
 	{
 		if (clazz != null)
 		{
@@ -236,7 +236,7 @@ public class Level
 			{
 				for (j = 0; j < IENTITIES_ARRAY_SIZE; ++j)
 				{
-					if (collisionMatrix[i][j] && (clazz.isInstance(iGameObjects[i]) || clazz.isInstance(iGameObjects[j])))
+					if (collisionMatrix[i][j] && (clazz.isInstance(iPhysicObjects[i]) || clazz.isInstance(iPhysicObjects[j])))
 						return true;
 				}
 			}
@@ -258,8 +258,8 @@ public class Level
 		
 		for (i = 0; i < IENTITIES_ARRAY_SIZE; ++i)
 		{
-			if (iGameObjects[i] != null)	
-				iGameObjects[i].destroy();
+			if (iPhysicObjects[i] != null)	
+				iPhysicObjects[i].destroy();
 		}
 		
 		i = 0;
@@ -270,7 +270,7 @@ public class Level
 		return canDestroy;
 	}
 	
-	public boolean collision(IGameObject ientity1, IGameObject ientity2)
+	public boolean collision(IPhysicObject ientity1, IPhysicObject ientity2)
 	{
 		if (ientity1 != null && ientity2 != null && !ientity1.equals(ientity2) && ientity1.getLevel() != null && ientity1.getLevel().equals(this) && ientity2.getLevel() != null 
 			&& ientity2.getLevel().equals(this))

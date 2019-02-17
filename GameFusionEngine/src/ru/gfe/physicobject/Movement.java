@@ -1,4 +1,4 @@
-package ru.gfe.gameobject;
+package ru.gfe.physicobject;
 
 public enum Movement 
 {
