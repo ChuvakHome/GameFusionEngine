@@ -6,14 +6,61 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import javafx.scene.media.AudioClip;
 import ru.gfe.engine.GameFusionEngine;
 
 public final class SoundHandler 
 {	
+	public static final int DURATION_IN_MILLIS = 0;
+	public static final int DURATION_IN_SECONDS = 1;
+	public static final int DURATION_IN_MINUTES = 2;
+	public static final int DURATION_IN_HOURS = 3;
+	
 	private static List<AudioClip> audioClips = new ArrayList<AudioClip>();
 	
 	private SoundHandler() {}
+	
+	public static double getDurationOfAudio(URL url, int flag)
+	{
+		if (url != null)
+		{	
+				try 
+				{
+					Clip clip = AudioSystem.getClip();
+					clip.open(AudioSystem.getAudioInputStream(url));
+					
+					double duration = clip.getMicrosecondLength();
+					
+					switch (flag)
+					{
+						case DURATION_IN_MILLIS:
+							duration /= 1000d;
+							break;
+						case DURATION_IN_SECONDS:
+							duration /= 1000000d;
+							break;
+						case DURATION_IN_MINUTES:
+							duration /= (1000000d * 60d);
+							break;
+						case DURATION_IN_HOURS:
+							duration /= (1000000d * 3600d);
+							break;
+					}
+					
+					clip = null;
+					
+					return duration;
+				} 
+				catch (Exception e) {e.printStackTrace();}
+				
+				return -1;
+		}
+		else
+			throw new NullPointerException("URL cannot be null");
+	}
 	
 	public static void play(URL url)
 	{
