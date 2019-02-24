@@ -14,10 +14,11 @@ import ru.gfe.engine.GameFusionEngine;
 
 public final class SoundHandler 
 {	
-	public static final int DURATION_IN_MILLIS = 0;
-	public static final int DURATION_IN_SECONDS = 1;
-	public static final int DURATION_IN_MINUTES = 2;
-	public static final int DURATION_IN_HOURS = 3;
+	public static final int DURATION_IN_MICROSECONDS = 0;
+	public static final int DURATION_IN_MILLISECONDS = 1;
+	public static final int DURATION_IN_SECONDS = 2;
+	public static final int DURATION_IN_MINUTES = 3;
+	public static final int DURATION_IN_HOURS = 4;
 	
 	private static List<AudioClip> audioClips = new ArrayList<AudioClip>();
 	
@@ -35,8 +36,8 @@ public final class SoundHandler
 					double duration = clip.getMicrosecondLength();
 					
 					switch (flag)
-					{
-						case DURATION_IN_MILLIS:
+					{ 
+						case DURATION_IN_MILLISECONDS:
 							duration /= 1000d;
 							break;
 						case DURATION_IN_SECONDS:
