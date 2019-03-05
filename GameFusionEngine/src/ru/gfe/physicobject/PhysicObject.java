@@ -7,7 +7,6 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 
 import ru.gfe.engine.Level;
-import ru.gfe.exception.IndexAlreadyInUseException;
 import ru.gfe.sequence.Sequence;
 
 public class PhysicObject implements IPhysicObject 
@@ -127,34 +126,20 @@ public class PhysicObject implements IPhysicObject
 		}
 	}
 	
-	public boolean addSequence(Sequence sequence, int index, boolean replace) throws IndexAlreadyInUseException
+	public void addSequence(Sequence sequence, int index, boolean replace)
 	{
-		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE && sequence != null)
+		checkIndex(index);
+		
+		if (sequence != null)
 		{
-			if (sequences[index] != null && !sequences[index].equals(sequence))
-			{
-				if (replace)
-					sequences[index] = sequence;
-				else
-					throw new IndexAlreadyInUseException(this, index);
-			}
-			
-			return true;
+			if ((sequences[index] != null && !sequences[index].equals(sequence) && replace) || sequences[index] == null)
+				sequences[index] = sequence;
 		}
-		else
-			return false;
 	}
 
-	public boolean addSequence(Sequence sequence, int index)
+	public void addSequence(Sequence sequence, int index)
 	{
-		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE && sequence != null)
-		{
-			sequences[index] = sequence;
-			
-			return true;
-		}
-		else
-			return false;
+		addSequence(sequence, index, true);
 	}
 	
 	public boolean currentSequenceEnded()
@@ -229,6 +214,8 @@ public class PhysicObject implements IPhysicObject
 	
 	public void startSequence(int index)
 	{
+		checkIndex(index);
+		
 		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE && this.index != index)
 		{	
 			if (this.index >= 0)
@@ -245,6 +232,14 @@ public class PhysicObject implements IPhysicObject
 			sequences[this.index].reset();
 			sequences[this.index].start();
 		}
+	}
+	
+	private static void checkIndex(int index)
+	{
+		if (index < 0)
+			throw new IndexOutOfBoundsException("Index cannot be negative");
+		else if (index < SEQUENCE_ARRAY_SIZE)
+			throw new IndexOutOfBoundsException("Index cannot be greater than SequenceArraySize");
 	}
 	
 	public void resetToPrimarySequence()
