@@ -151,27 +151,57 @@ public final class SoundHandler
 		play(uri, volume, -1);
 	}
 	
-	public static void stop(URL url)
+	public static boolean isPlaying(URL url)
+	{
+		if (url != null)
+		{
+			try 
+			{	
+				if (url != null)
+				{
+					for (AudioClip audioClip: audioClips)
+					{
+						if (audioClip != null && audioClip.getSource().equals(url.toString()))
+							return audioClip.isPlaying();
+					}
+					}
+			} catch (Exception e) {e.printStackTrace();}
+		}
+		
+		return false;
+	}
+	
+	public static boolean isPlaying(URI uri)
 	{
 		try 
 		{
-			stop(url.toURI());
+			return isPlaying(uri.toURL());
 		} catch (Exception e) {e.printStackTrace();}
+		
+		return false;
 	}
 	
 	public static void stop(URI uri)
 	{
+		try 
+		{
+			stop(uri.toURL());
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
+	public static void stop(URL url)
+	{
 		EventQueue.invokeLater(() ->
 		{
-			if (uri != null)
+			if (url != null)
 			{
 				try 
 				{	
-					if (uri != null)
+					if (url != null)
 					{
 						for (AudioClip audioClip: audioClips)
 						{
-							if (audioClip != null && audioClip.getSource().equals(uri.toString()))
+							if (audioClip != null && audioClip.getSource().equals(url.toString()) && audioClip.isPlaying())
 								audioClip.stop();
 						}
 					}
