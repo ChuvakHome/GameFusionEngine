@@ -201,8 +201,11 @@ public final class SoundHandler
 					{
 						for (AudioClip audioClip: audioClips)
 						{
-							if (audioClip != null && audioClip.getSource().equals(url.toString()) && audioClip.isPlaying())
+							if (audioClip != null && audioClip.getSource().equals(url.toString()))
+							{
 								audioClip.stop();
+								audioClips.remove(audioClip);
+							}
 						}
 					}
 				} catch (Exception e) {e.printStackTrace();}
