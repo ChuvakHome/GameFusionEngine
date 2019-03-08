@@ -238,7 +238,7 @@ public class PhysicObject implements IPhysicObject
 	{
 		if (index < 0)
 			throw new IndexOutOfBoundsException("Index cannot be negative");
-		else if (index < SEQUENCE_ARRAY_SIZE)
+		else if (index > SEQUENCE_ARRAY_SIZE)
 			throw new IndexOutOfBoundsException("Index cannot be greater than SequenceArraySize");
 	}
 	
