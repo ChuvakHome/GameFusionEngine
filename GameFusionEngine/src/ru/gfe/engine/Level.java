@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.Stack;
 
 import ru.gfe.event.Event;
 import ru.gfe.physicobject.IPhysicObject;
@@ -13,6 +14,7 @@ import ru.gfe.physicobject.IPhysicObject;
 public class Level 
 {
 	public static final int IENTITIES_ARRAY_SIZE = 127;
+	public static final int IACTIONS_STACK_SIZE = 256;
 	
 	protected Container levelContainer = new Container();
 	protected String levelName;
@@ -21,9 +23,11 @@ public class Level
 	
 	protected IPhysicObject[] iPhysicObjects = new IPhysicObject[IENTITIES_ARRAY_SIZE];
 	
+	private Stack<IAction> actionStack = new Stack<IAction>();
+	
 	protected int freeId;
 	
-	private boolean canDestroy;
+	private boolean update;
 	
 	protected int zOrder;
 	
@@ -42,29 +46,37 @@ public class Level
 		if (freeId >= 0 && freeId < IENTITIES_ARRAY_SIZE && iGameObject != null && iGameObject.getLevel() == null)
 		{
 			iPhysicObjects[freeId] = iGameObject;
-			
+					
 			levelContainer.add(iPhysicObjects[freeId].getVisual());
-			
+				
 			if (setDefaultZOrder)	
 				levelContainer.setComponentZOrder(iPhysicObjects[freeId].getVisual(), zOrder);
-			
+				
 			iGameObject.setLevel(this, freeId++);
-			
+				
 			return true;
 		}
 		else
 			return false;
 	}
 	
+	private boolean checkStack()
+	{
+		return actionStack.size() < IACTIONS_STACK_SIZE;
+	}
+	
 	public void removeGameObject(int id)
 	{
-		if (id >= 0)
-		{
+		if (id >= 0 && checkStack())
+		{	
 			if (iPhysicObjects[id] != null && iPhysicObjects[id].getLevel() != null && iPhysicObjects[id].getLevel().equals(this))
 			{
-				iPhysicObjects[id].removeLevel(this, id);
-				levelContainer.remove(iPhysicObjects[id].getVisual());
-				iPhysicObjects[id] = null;
+				actionStack.push(() ->
+				{
+					levelContainer.remove(iPhysicObjects[id].getVisual());
+					iPhysicObjects[id].removeLevel(this, id);
+					iPhysicObjects[id] = null;
+				});
 			}
 		}
 	}
@@ -95,26 +107,36 @@ public class Level
 		
 		temp = null;
 		i = 0;
+		
+		update = true;
 	}
 	
 	public void update()
-	{
-		int i = 0;
-		int j = 0;
-		
-		Rectangle rect1;
-		Rectangle rect2;
-		
-		for (i = 0; i <= freeId; ++i)
-		{
-			if (iPhysicObjects[i] != null)
-			{
-				iPhysicObjects[i].update();
+	{	
+		if (update)
+		{	
+			int i = 0;
+			int j = 0;
 			
+			j = actionStack.size();
+			
+			for (i = 0; i < j; ++i)
+				actionStack.pop().proceed();
+			
+			i = 0;
+			j = 0;
+			
+			Rectangle rect1;
+			Rectangle rect2;
+			
+			for (i = 0; i <= freeId; ++i)
+			{
 				if (iPhysicObjects[i] != null && iPhysicObjects[i].isActive())
-				{	
+				{
+					iPhysicObjects[i].update();
+						
 					rect1 = iPhysicObjects[i].getRect();
-					
+						
 					for (j = 0; j <= freeId; ++j)
 					{
 						if (iPhysicObjects[j] != null && iPhysicObjects[j].isActive())
@@ -124,14 +146,14 @@ public class Level
 							else
 							{
 								rect2 = iPhysicObjects[j].getRect();
-									
+										
 								if (rect1 != null && rect2 != null)
 								{
 									if (!collisionMatrix[i][j] && rect1.intersects(rect2))
 									{
 										collisionMatrix[i][j] = true;
 										collisionMatrix[j][i] = true;
-										
+											
 										iPhysicObjects[i].processCollision(iPhysicObjects[j]);
 										iPhysicObjects[j].processCollision(iPhysicObjects[i]);
 									}
@@ -146,13 +168,18 @@ public class Level
 					}
 				}
 			}
+			
+			j = actionStack.size();
+			
+			for (i = 0; i < j; ++i)
+				actionStack.pop().proceed();
+			
+			i = 0;
+			j = 0;
+			
+			rect1 = null;
+			rect2 = null;
 		}
-		
-		i = 0;
-		j = 0;
-		
-		rect1 = null;
-		rect2 = null;
 	}
 	
 	public IPhysicObject[] getIGameObjectArray()
@@ -247,7 +274,7 @@ public class Level
 	
 	protected void destroy() 
 	{
-		canDestroy = true;
+		update = false;
 		
 		levelContainer.removeAll();
 		levelContainer.setLayout(null);
@@ -255,19 +282,29 @@ public class Level
 		levelName = null;
 		
 		int i = 0;
+		int j = 0;
 		
-		for (i = 0; i < IENTITIES_ARRAY_SIZE; ++i)
+		j = actionStack.size();
+		
+		for (i = 0; i < j; ++i)
+			actionStack.pop().proceed();
+		
+		for (i = 0; i < freeId; ++i)
 		{
 			if (iPhysicObjects[i] != null)	
-				iPhysicObjects[i].destroy();
+			{
+				iPhysicObjects[i].removeLevel(this, iPhysicObjects[i].getId());
+				iPhysicObjects[i] = null;
+			}
 		}
 		
 		i = 0;
+		j = 0;
 	}
 	
 	public boolean canDestroy()
 	{
-		return canDestroy;
+		return update;
 	}
 	
 	public boolean collision(IPhysicObject ientity1, IPhysicObject ientity2)

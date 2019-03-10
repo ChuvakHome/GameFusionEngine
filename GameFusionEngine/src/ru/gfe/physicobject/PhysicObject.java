@@ -28,12 +28,16 @@ public class PhysicObject implements IPhysicObject
 	
 	protected Level level;
 	
+	private boolean active;
+	
 	public PhysicObject(JLabel body, Sequence primarySequence, int posX, int posY)
 	{
 		this.body = body;
 		this.primarySequence = primarySequence;
 		this.posX = posY;
 		this.posY = posY;
+		
+		active = true;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
 	}
@@ -43,6 +47,8 @@ public class PhysicObject implements IPhysicObject
 		this.body = body;
 		this.posX = posY;
 		this.posY = posY;
+		
+		active = true;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
 	}
@@ -95,6 +101,8 @@ public class PhysicObject implements IPhysicObject
 		{
 			this.level = null;
 			this.id = -1;
+			
+			destroyGameObject();
 		}
 	}
 	
@@ -158,12 +166,6 @@ public class PhysicObject implements IPhysicObject
 			return primarySequence.isStarted();
 	}
 	
-	public void destroy() 
-	{
-		if (canDestroy())
-			destroyGameObject();
-	}
-	
 	protected void destroyGameObject()
 	{
 		icon = null;
@@ -183,16 +185,13 @@ public class PhysicObject implements IPhysicObject
 			primarySequence = null;
 		}
 		
+		active = false;
+		
 		posX = 0;
 		posY = 0;
 		
 		index = 0;
 		id = 0;
-	}
-	
-	protected boolean canDestroy()
-	{
-		return (level != null && level.canDestroy()) || level == null;
 	}
 	
 	protected void destroyAllSequence()
@@ -419,30 +418,39 @@ public class PhysicObject implements IPhysicObject
 	
 	public void setLocation(int posX, int posY)
 	{
-		this.posX = posX;
-		this.posY = posY;
-		
-		body.setLocation(this.posX, this.posY);
+		if (body != null)
+		{
+			this.posX = posX;
+			this.posY = posY;
+			
+			body.setLocation(this.posX, this.posY);
+		}
 	}
 	
 	public void setLocation(Point p)
 	{
-		this.posX = p.x;
-		this.posY = p.y;
-		
-		body.setLocation(p);
+		if (body != null)
+		{
+			this.posX = p.x;
+			this.posY = p.y;
+			
+			body.setLocation(p);
+		}
 	}
 	
 	public Point getLocation()
 	{
-		return body.getLocation();
+		return body != null ? body.getLocation() : null;
 	}
 	
 	public void setX(int posX)
 	{
-		this.posX = posX;
-		
-		body.setLocation(this.posX, posY);
+		if (body != null)
+		{
+			this.posX = posX;
+			
+			body.setLocation(this.posX, posY);
+		}
 	}
 	
 	public int getX()
@@ -452,9 +460,12 @@ public class PhysicObject implements IPhysicObject
 	
 	public void setY(int posY)
 	{
-		this.posY = posY;
-		
-		body.setLocation(posX, this.posY);
+		if (body != null)
+		{
+			this.posY = posY;
+			
+			body.setLocation(posX, this.posY);
+		}
 	}
 	
 	public int getY()
@@ -469,7 +480,7 @@ public class PhysicObject implements IPhysicObject
 
 	public boolean isActive() 
 	{
-		return true;
+		return active;
 	}
 	
 	public void processCollision(IPhysicObject iGameObject) {}

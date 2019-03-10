@@ -30,8 +30,6 @@ public interface IPhysicObject
 	
 	public Rectangle getRect();
 	
-	public void destroy();
-	
 	public boolean isActive();
 	
 	public void processCollision(IPhysicObject iGameObject);
