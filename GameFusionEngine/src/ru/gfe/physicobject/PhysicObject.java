@@ -215,27 +215,32 @@ public class PhysicObject implements IPhysicObject
 	{
 		checkIndex(index);
 		
-		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE && this.index != index)
-		{	
-			if (this.index >= 0)
-			{
-				sequences[this.index].pause();
+		if (this.index != index)
+		{
+			if (index >= 0 && index < SEQUENCE_ARRAY_SIZE)
+			{	
+				if (this.index >= 0)
+				{
+					sequences[this.index].pause();
+					sequences[this.index].reset();
+				}
+				
+				this.index = index;
+				
+				if (sequences[this.index].isPaused())
+					sequences[this.index].resume();
+				
 				sequences[this.index].reset();
+				sequences[this.index].start();
 			}
-			
-			this.index = index;
-			
-			if (sequences[this.index].isPaused())
-				sequences[this.index].resume();
-			
-			sequences[this.index].reset();
-			sequences[this.index].start();
+			else if (index == -1)
+				resetToPrimarySequence();
 		}
 	}
 	
 	private static void checkIndex(int index)
 	{
-		if (index < 0)
+		if (index < -1)
 			throw new IndexOutOfBoundsException("Index cannot be negative");
 		else if (index > SEQUENCE_ARRAY_SIZE)
 			throw new IndexOutOfBoundsException("Index cannot be greater than SequenceArraySize");
