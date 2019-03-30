@@ -1,6 +1,6 @@
 package ru.gfe.physicobject;
 
-public enum Movement 
+public enum Direction 
 {
 	NONE, LEFT, RIGHT;
 }
