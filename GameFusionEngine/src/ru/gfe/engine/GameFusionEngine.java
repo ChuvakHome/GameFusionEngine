@@ -204,8 +204,6 @@ public final class GameFusionEngine
 	public static void launch(int width, int height, boolean undecorated)
 	{	
 		display = new Display(width, height, undecorated);
-		
-		display.setSize(640, 480);
 		display.setLocationRelativeTo(null);
 		
 		if (currentLevel != null)
