@@ -19,8 +19,9 @@ public class Display extends JFrame
 	private boolean fullScreen;
 	private boolean close;
 	
-	public Display(boolean undecorated)
+	public Display(int width, int height, boolean undecorated)
 	{
+		setSize(width, height);
 		setUndecorated(undecorated);
 	}
 	

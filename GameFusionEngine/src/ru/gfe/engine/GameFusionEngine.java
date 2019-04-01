@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.lang.reflect.Constructor;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,11 +32,6 @@ public final class GameFusionEngine
 	
 	private static Level currentLevel;
 	
-	private static Class<? extends Display> displayClazz;
-	private static Object[] args;
-	
-	private static boolean displayChanged;
-	
 	private GameFusionEngine() {}
 	
 	public static Level getLevel()
@@ -53,16 +47,6 @@ public final class GameFusionEngine
 	public static int getDisplayHeight()
 	{
 		return display.getHeight();
-	}
-	
-	public static void setDisplay(Class<? extends Display> clazz, Object... initargs)
-	{
-		if (clazz != null && !started)
-		{
-			displayClazz = clazz;
-			args = initargs;
-			displayChanged = true;
-		}
 	}
 	
 	public static void setKeyHandler(KeyHandler handler)
@@ -197,19 +181,19 @@ public final class GameFusionEngine
 		launch(false);
 	}
 	
-	public static void launch(int width, int height)
-	{
-		launch(width, height, false);
-	}
-	
 	public static void launch(boolean undecorated)
 	{
 		launch(Display.getScreenDimension(), undecorated);
 	}
 	
+	public static void launch(int width, int height)
+	{
+		launch(width, height, false);
+	}
+	
 	public static void launch(Dimension dimension)
 	{
-		launch(dimension.width, dimension.height);
+		launch(dimension.width, dimension.height, false);
 	}
 	
 	public static void launch(Dimension dimension, boolean undecorated)
@@ -217,33 +201,11 @@ public final class GameFusionEngine
 		launch(dimension.width, dimension.height, undecorated);
 	}
 	
-	private static void createDisplay()
-	{
-		if (displayChanged)
-		{
-			try
-			{
-				for (Constructor<?> contructor: displayClazz.getConstructors())
-				{
-					Object temp = contructor.newInstance(args);
-					
-					if (temp != null)
-						display = (Display) temp;
-				}
-			} catch (Exception e) {}
-		}
-		else
-			display = new Display((boolean) args[0]);
-	}
-	
 	public static void launch(int width, int height, boolean undecorated)
 	{	
-		if (!displayChanged)
-			args = new Object[]{undecorated};
+		display = new Display(width, height, undecorated);
 		
-		createDisplay();
-		
-		display.setSize(width, height);
+		display.setSize(640, 480);
 		display.setLocationRelativeTo(null);
 		
 		if (currentLevel != null)
