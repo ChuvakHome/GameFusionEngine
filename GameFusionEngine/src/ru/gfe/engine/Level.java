@@ -76,6 +76,9 @@ public class Level
 					levelContainer.remove(iPhysicObjects[id].getVisual());
 					iPhysicObjects[id].removeLevel(this, id);
 					iPhysicObjects[id] = null;
+					
+					if (id + 1 == freeId)
+						--freeId;
 				});
 			}
 		}
@@ -137,7 +140,7 @@ public class Level
 						
 					rect1 = iPhysicObjects[i].getRect();
 						
-					for (j = 0; j <= freeId; ++j)
+					for (j = 0; j < freeId; ++j)
 					{
 						if (iPhysicObjects[j] != null && iPhysicObjects[j].isActive())
 						{
