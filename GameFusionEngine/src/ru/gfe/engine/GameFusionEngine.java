@@ -54,17 +54,17 @@ public final class GameFusionEngine
 		keyHandler = handler;
 	}
 	
+	public static void setMouseHandler(MouseHandler handler)
+	{
+		mouseHandler = handler;
+	}
+	
 	public static void processEvent(Event e)
 	{
 		if (engineHandler != null)	
 			engineHandler.processEvent(e);
 		if (currentLevel != null)
 			currentLevel.processEvent(e);
-	}
-	
-	public static void setMouseHandler(MouseHandler handler)
-	{
-		mouseHandler = handler;
 	}
 	
 	public static void processKeyEvent(KeyEvent e)
