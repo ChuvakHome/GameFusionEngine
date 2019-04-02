@@ -111,15 +111,10 @@ public final class GameFusionEngine
 	
 	public static void changeLevel(String levelName, boolean stopSounds)
 	{
-		changeLevel(levelName, stopSounds, true);
+		EventQueue.invokeLater(() -> changeLevel0(levelName, stopSounds));
 	}
 	
-	public static void changeLevel(String levelName, boolean stopSounds, boolean removeFrameImage)
-	{
-		EventQueue.invokeLater(() -> changeLevel0(levelName, stopSounds, removeFrameImage));
-	}
-	
-	private static void changeLevel0(String levelName, boolean stopSounds, boolean removeFrameImage)
+	private static void changeLevel0(String levelName, boolean stopSounds)
 	{
 		Level level = LevelCollection.getLevelByName(levelName);
 		
