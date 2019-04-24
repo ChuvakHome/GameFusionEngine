@@ -172,11 +172,6 @@ public class Level
 				}
 			}
 			
-			j = actionStack.size();
-			
-			for (i = 0; i < j; ++i)
-				actionStack.pop().proceed();
-			
 			i = 0;
 			j = 0;
 			
