@@ -65,13 +65,19 @@ public class Level
 		return actionStack.size() < IACTIONS_STACK_SIZE;
 	}
 	
+	public void addToActionStack(IAction iAction)
+	{
+		if (checkStack())
+			actionStack.push(iAction);
+	}
+	
 	public void removeGameObject(int id)
 	{
-		if (id >= 0 && checkStack())
+		if (id >= 0)
 		{	
 			if (iPhysicObjects[id] != null && iPhysicObjects[id].getLevel() != null && iPhysicObjects[id].getLevel().equals(this))
 			{
-				actionStack.push(() ->
+				addToActionStack(() ->
 				{
 					levelContainer.remove(iPhysicObjects[id].getVisual());
 					iPhysicObjects[id].removeLevel(this, id);
