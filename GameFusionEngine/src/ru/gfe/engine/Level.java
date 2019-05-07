@@ -60,7 +60,7 @@ public class Level
 			return false;
 	}
 	
-	private boolean checkStack()
+	public boolean checkStack()
 	{
 		return actionStack.size() < IACTIONS_STACK_SIZE;
 	}
