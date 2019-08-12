@@ -20,6 +20,7 @@ public class Sequence
 	private boolean start;
 	private boolean pause;
 	private boolean end;
+	private boolean reverse;
 	private long delay = 40;
 	private long updateTime;
 	
@@ -197,7 +198,28 @@ public class Sequence
 			index++;
 		}
     }
+	
+	public void setFrame(int frame)
+	{
+		if (frame < 0)
+			throw new NumberFormatException("Frame number cannot be negative");
+		else if (frame >= frames.length)
+			throw new NumberFormatException("Too big number");
+		else
+		{
+			pause = true;
+			currentFrame = ResourceHandler.getImageIcon(frames[frame]);
+			pause = false;
+		}
+	}
   
+	public void reverse()
+	{
+		pause = true;
+		reverse = !reverse;
+		pause = false;
+	}
+	
 	public void pause()
 	{
 		pause = true;
@@ -222,7 +244,7 @@ public class Sequence
 	{
 		if (index >= frames.length)
 		{
-			loop -= 1;
+			--loop;
       
 			if (loop != 0)
 				index = 0;
@@ -233,8 +255,8 @@ public class Sequence
 				stop();
 			}
 		}
-    
-		return frames[index++];
+		
+		return frames[reverse ? frames.length - index++ - 1 : index++];
 	}
   
 	public void reset()

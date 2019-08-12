@@ -1,5 +1,6 @@
 package ru.gfe.engine;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
@@ -25,8 +26,13 @@ public final class GameFusionEngine
 	private static KeyHandler keyHandler;
 	private static MouseHandler mouseHandler;	
 	
+	private static String primaryLevelName;
+	
 	private static boolean started;
 	private static boolean updateLevel;
+	private static boolean changingLevel;
+	
+//	private static Thread gameThread;
 	
 	private static long timeOnLevel;
 	
@@ -111,35 +117,76 @@ public final class GameFusionEngine
 	
 	public static void changeLevel(String levelName, boolean stopSounds)
 	{
-		EventQueue.invokeLater(() -> changeLevel0(levelName, stopSounds));
-	}
-	
-	private static void changeLevel0(String levelName, boolean stopSounds)
-	{
-		Level level = LevelCollection.getLevelByName(levelName);
+//		EventQueue.invokeLater(() -> changeLevel0(levelName, stopSounds));
 		
-		if (level != null && level.levelContainer != null && (currentLevel != null || !level.equals(currentLevel)))
+		Level level = LevelCollection.getLevelByName(levelName);
+		changingLevel = true;
+		updateLevel = false;
+		
+		if (level != null && level.levelContainer != null)
 		{
 			if (stopSounds)
 				SoundHandler.stopAll();
 			
-			updateLevel = false;
-			currentLevel.destroy();
+			if (currentLevel != null)
+			{
+				currentLevel.canDestroyLevel = true;
+				currentLevel.destroy();
+			}
+			
 			currentLevel = level;
 			
-			display.setVisible(false);
-			
-			currentLevel.init();	
-			display.setContentPane(currentLevel.levelContainer);
-			currentLevel.postInit();
-			
-			display.setVisible(true);	
+			EventQueue.invokeLater(() -> 
+			{
+				display.setVisible(false);
 				
-			updateLevel = true;
+				currentLevel.init();	
+				display.setContentPane(currentLevel.levelContainer);
+				currentLevel.postInit();
+				
+				display.setVisible(true);
+			});
 			
 			timeOnLevel = 0;
 		}
+		
+		changingLevel = false;
+		updateLevel = true;
 	}
+	
+//	private static void changeLevel0(String levelName, boolean stopSounds)
+//	{
+//		Level level = LevelCollection.getLevelByName(levelName);
+//		changingLevel = true;
+//		updateLevel = false;
+//		
+//		if (level != null && level.levelContainer != null)
+//		{
+//			if (stopSounds)
+//				SoundHandler.stopAll();
+//			
+//			if (currentLevel != null)
+//			{
+//				currentLevel.canDestroyLevel = true;
+//				currentLevel.destroy();
+//			}
+//			
+//			currentLevel = level;
+//			
+//			display.setVisible(false);
+//			
+//			currentLevel.init();	
+//			display.setContentPane(currentLevel.levelContainer);
+//			currentLevel.postInit();
+//			
+//			display.setVisible(true);
+//			
+//			timeOnLevel = 0;
+//		}
+//		
+//		changingLevel = false;
+//		updateLevel = true;
+//	}
 	
 	public static void exit()
 	{
@@ -162,8 +209,8 @@ public final class GameFusionEngine
 	
 	public static void setPrimaryLevel(String name)
 	{
-		if (currentLevel == null)
-			currentLevel = LevelCollection.getLevelByName(name);
+		if (!started)
+			primaryLevelName = name;
 	}
 	
 	public static void setEngineHandler(EngineHandler handler)
@@ -200,9 +247,11 @@ public final class GameFusionEngine
 	{	
 		display = new Display(width, height, undecorated);
 		display.setLocationRelativeTo(null);
+		display.setBackground(Color.BLACK);
 		
-		if (currentLevel != null)
+		if (primaryLevelName != null)
 		{
+			currentLevel = LevelCollection.getLevelByName(primaryLevelName);
 			currentLevel.init();
 			display.setContentPane(currentLevel.getLevelContainer());
 		}
@@ -214,6 +263,7 @@ public final class GameFusionEngine
 		
 		started = true;
 		updateLevel = true;
+		changingLevel = false;
 		
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask()
@@ -222,7 +272,7 @@ public final class GameFusionEngine
 			{
 				if (!display.canClose())
 				{
-					if (updateLevel)
+					if (updateLevel && !changingLevel)
 					{	
 						++timeOnLevel;
 						

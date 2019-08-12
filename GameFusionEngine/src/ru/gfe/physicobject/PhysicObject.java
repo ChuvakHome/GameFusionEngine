@@ -105,21 +105,6 @@ public class PhysicObject implements IPhysicObject
 			destroyGameObject();
 		}
 	}
-	
-	public boolean collision(IPhysicObject ientity)
-	{
-		return level != null ? level.collision(this, ientity) : false;
-	}
-	
-	public boolean collision()
-	{
-		return level != null ? level.collision(this) : false;
-	}
-	
-	public boolean collision(Class<? extends IPhysicObject> clazz)
-	{
-		return level != null ? level.collision(this, clazz) : false;
-	}
 
 	public Level getLevel()
 	{
@@ -309,6 +294,7 @@ public class PhysicObject implements IPhysicObject
 		if (temp != null && (icon == null || !icon.equals(temp)))
 		{
 			icon = temp;
+			body.setSize(icon.getIconWidth(), icon.getIconHeight());
 			body.setIcon(icon);
 			body.repaint();
 		}

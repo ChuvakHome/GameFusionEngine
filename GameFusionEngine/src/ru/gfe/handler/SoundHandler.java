@@ -164,7 +164,7 @@ public final class SoundHandler
 						if (audioClip != null && audioClip.getSource().equals(url.toString()))
 							return audioClip.isPlaying();
 					}
-					}
+				}
 			} catch (Exception e) {e.printStackTrace();}
 		}
 		
