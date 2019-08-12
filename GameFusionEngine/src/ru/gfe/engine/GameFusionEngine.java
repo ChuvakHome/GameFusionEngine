@@ -2,7 +2,6 @@ package ru.gfe.engine;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -31,8 +30,6 @@ public final class GameFusionEngine
 	private static boolean started;
 	private static boolean updateLevel;
 	private static boolean changingLevel;
-	
-//	private static Thread gameThread;
 	
 	private static long timeOnLevel;
 	
@@ -116,9 +113,7 @@ public final class GameFusionEngine
 	}
 	
 	public static void changeLevel(String levelName, boolean stopSounds)
-	{
-//		EventQueue.invokeLater(() -> changeLevel0(levelName, stopSounds));
-		
+	{	
 		Level level = LevelCollection.getLevelByName(levelName);
 		changingLevel = true;
 		updateLevel = false;
@@ -136,16 +131,13 @@ public final class GameFusionEngine
 			
 			currentLevel = level;
 			
-			EventQueue.invokeLater(() -> 
-			{
-				display.setVisible(false);
+			display.setVisible(false);
 				
-				currentLevel.init();	
-				display.setContentPane(currentLevel.levelContainer);
-				currentLevel.postInit();
+			currentLevel.init();	
+			display.setContentPane(currentLevel.levelContainer);
+			currentLevel.postInit();
 				
-				display.setVisible(true);
-			});
+			display.setVisible(true);
 			
 			timeOnLevel = 0;
 		}
@@ -153,40 +145,6 @@ public final class GameFusionEngine
 		changingLevel = false;
 		updateLevel = true;
 	}
-	
-//	private static void changeLevel0(String levelName, boolean stopSounds)
-//	{
-//		Level level = LevelCollection.getLevelByName(levelName);
-//		changingLevel = true;
-//		updateLevel = false;
-//		
-//		if (level != null && level.levelContainer != null)
-//		{
-//			if (stopSounds)
-//				SoundHandler.stopAll();
-//			
-//			if (currentLevel != null)
-//			{
-//				currentLevel.canDestroyLevel = true;
-//				currentLevel.destroy();
-//			}
-//			
-//			currentLevel = level;
-//			
-//			display.setVisible(false);
-//			
-//			currentLevel.init();	
-//			display.setContentPane(currentLevel.levelContainer);
-//			currentLevel.postInit();
-//			
-//			display.setVisible(true);
-//			
-//			timeOnLevel = 0;
-//		}
-//		
-//		changingLevel = false;
-//		updateLevel = true;
-//	}
 	
 	public static void exit()
 	{
@@ -260,6 +218,8 @@ public final class GameFusionEngine
 		
 		if (currentLevel != null)
 			currentLevel.postInit();
+		else
+			currentLevel = new Level();
 		
 		started = true;
 		updateLevel = true;
@@ -279,8 +239,7 @@ public final class GameFusionEngine
 						if (engineHandler != null)
 							engineHandler.update();
 						
-						if (currentLevel != null) 
-							currentLevel.update();
+						currentLevel.update();
 					}
 				}
 				else
