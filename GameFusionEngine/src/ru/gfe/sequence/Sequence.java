@@ -21,6 +21,7 @@ public class Sequence
 	private boolean pause;
 	private boolean end;
 	private boolean reverse;
+	private boolean looped;
 	private long delay = 40;
 	private long updateTime;
 	
@@ -163,7 +164,10 @@ public class Sequence
 	public void loop(int loopTimes)
 	{
 		if (loopTimes >= 0 || loopTimes == LOOP_CONTINUOUSLY)	
+		{
 			loop = loopTimes;
+			looped = loopTimes == LOOP_CONTINUOUSLY;
+		}
 		else
 			throw new NumberFormatException("Loop cannot be negative");
 	}
@@ -246,7 +250,7 @@ public class Sequence
 		{
 			--loop;
       
-			if (loop > 0)
+			if (loop > 0 || looped)
 				index = 0;
 			else
 			{
