@@ -5,15 +5,19 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
 import ru.gfe.engine.GameFusionEngine;
 
-public class Display extends JFrame
+public class Display extends JFrame implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener
 {
 	private static final long serialVersionUID = -8296410480257618092L;
 	private boolean fullScreen;
@@ -23,6 +27,10 @@ public class Display extends JFrame
 	{
 		setSize(width, height);
 		setUndecorated(undecorated);
+		addKeyListener(this);
+		addMouseListener(this);
+		addMouseMotionListener(this);
+		addMouseWheelListener(this);
 	}
 	
 	public void setFullScreen(boolean fullScreen)
@@ -79,26 +87,6 @@ public class Display extends JFrame
 		return fullScreen;
 	}
 	  
-	protected void processKeyEvent(KeyEvent e)
-	{
-		GameFusionEngine.processKeyEvent(e);
-	}
-	  
-	protected void processMouseEvent(MouseEvent e)
-	{
-		GameFusionEngine.processMouseEvent(e);
-	}
-	  
-	protected void processMouseMotionEvent(MouseEvent e)
-	{
-		GameFusionEngine.processMouseMotionEvent(e);
-	}
-	  
-	protected void processMouseWheelEvent(MouseWheelEvent e)
-	{
-		GameFusionEngine.processMouseWheelEvent(e);
-	}
-	  
 	protected void processWindowEvent(WindowEvent e)
 	{
 		if (e.getID() == WindowEvent.WINDOW_CLOSING)
@@ -108,5 +96,60 @@ public class Display extends JFrame
 	public boolean canClose() 
 	{
 		return close;
+	}
+
+	public void keyTyped(KeyEvent e) 
+	{
+		GameFusionEngine.processKeyEvent(e);
+	}
+
+	public void keyPressed(KeyEvent e) 
+	{
+		GameFusionEngine.processKeyEvent(e);
+	}
+
+	public void keyReleased(KeyEvent e) 
+	{
+		GameFusionEngine.processKeyEvent(e);
+	}
+	
+	public void mouseClicked(MouseEvent e) 
+	{
+		GameFusionEngine.processMouseEvent(e);
+	}
+
+	public void mousePressed(MouseEvent e) 
+	{
+		GameFusionEngine.processMouseEvent(e);
+	}
+
+	public void mouseReleased(MouseEvent e) 
+	{
+		GameFusionEngine.processMouseEvent(e);
+	}
+
+	public void mouseEntered(MouseEvent e) 
+	{
+		GameFusionEngine.processMouseEvent(e);
+	}
+
+	public void mouseExited(MouseEvent e) 
+	{
+		GameFusionEngine.processMouseEvent(e);
+	}
+	
+	public void mouseDragged(MouseEvent e) 
+	{
+		GameFusionEngine.processMouseMotionEvent(e);
+	}
+
+	public void mouseMoved(MouseEvent e) 
+	{
+		GameFusionEngine.processMouseMotionEvent(e);
+	}
+
+	public void mouseWheelMoved(MouseWheelEvent e) 
+	{
+		GameFusionEngine.processMouseWheelEvent(e);
 	}
 }

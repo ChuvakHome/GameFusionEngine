@@ -2,6 +2,7 @@ package ru.gfe.physicobject;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseListener;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -149,6 +150,12 @@ public class PhysicObject implements IPhysicObject
 			return sequences[index].isStarted();
 		else
 			return primarySequence.isStarted();
+	}
+	
+	public void addMouseListener(MouseListener mouseListener)
+	{
+		if (body != null)
+			body.addMouseListener(mouseListener);
 	}
 	
 	protected void destroyGameObject()

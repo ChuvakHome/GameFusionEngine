@@ -199,14 +199,18 @@ public final class SoundHandler
 				{	
 					if (url != null)
 					{
+						List<AudioClip> list = new ArrayList<AudioClip>();
+						
 						for (AudioClip audioClip: audioClips)
 						{
 							if (audioClip != null && audioClip.getSource().equals(url.toString()))
 							{
 								audioClip.stop();
-								audioClips.remove(audioClip);
+								list.add(audioClip);
 							}
 						}
+						
+						audioClips.removeAll(list);
 					}
 				} catch (Exception e) {e.printStackTrace();}
 			}
