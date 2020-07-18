@@ -178,6 +178,17 @@ public class Level
 		return iPhysicObjects;
 	}
 	
+	public IPhysicObject getObjectByName(String s)
+	{
+		for (IPhysicObject object: iPhysicObjects)
+		{
+			if (object != null && object.getName().equals(s))
+				return object;
+		}
+		
+		return null;
+	}
+	
 	protected void destroy() 
 	{	
 		if (canDestroyLevel)
