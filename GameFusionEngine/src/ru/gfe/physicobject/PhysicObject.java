@@ -8,6 +8,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 
 import ru.gfe.engine.Level;
+import ru.gfe.handler.SequenceHandler;
 import ru.gfe.sequence.Sequence;
 
 public class PhysicObject implements IPhysicObject 
@@ -32,6 +33,8 @@ public class PhysicObject implements IPhysicObject
 	private String name;
 	
 	private boolean active;
+	
+	private SequenceHandler sequenceHandler;
 	
 	public PhysicObject(JLabel body, Sequence primarySequence, int posX, int posY, String name)
 	{
@@ -195,6 +198,11 @@ public class PhysicObject implements IPhysicObject
 			body.addMouseListener(mouseListener);
 	}
 	
+	public void setSequenceHandler(SequenceHandler sequenceHandler)
+	{
+		this.sequenceHandler = sequenceHandler;
+	}
+	
 	protected void destroyGameObject()
 	{
 		icon = null;
@@ -341,6 +349,17 @@ public class PhysicObject implements IPhysicObject
 			body.setSize(icon.getIconWidth(), icon.getIconHeight());
 			body.setIcon(icon);
 			body.repaint();
+		}
+		
+		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE)
+		{
+			if (sequences[index] != null && sequenceHandler != null && sequences[index].framesSequenceEnd())
+				sequenceHandler.onSequenceEnd(this, sequences[index], index);
+		}
+		else if (index == -1)
+		{
+			if (primarySequence != null && sequenceHandler != null && primarySequence.framesSequenceEnd())
+				sequenceHandler.onSequenceEnd(this, primarySequence, index);
 		}
 	}
 	

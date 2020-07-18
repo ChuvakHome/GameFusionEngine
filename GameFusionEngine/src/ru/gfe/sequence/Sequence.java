@@ -158,7 +158,7 @@ public class Sequence
 	
 	public boolean framesSequenceEnd()
 	{
-		return end;
+		return end && !looped;
 	}
   
 	public void loop(int loopTimes)
