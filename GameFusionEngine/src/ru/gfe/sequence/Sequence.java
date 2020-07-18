@@ -17,6 +17,7 @@ public class Sequence
 	private Image[] frames;
 	private int index = 0;
 	private int loop = 1;
+	private int loopCounter = 1;
 	private boolean start;
 	private boolean pause;
 	private boolean end;
@@ -166,6 +167,7 @@ public class Sequence
 		if (loopTimes >= 0 || loopTimes == LOOP_CONTINUOUSLY)	
 		{
 			loop = loopTimes;
+			loopCounter = loopTimes;
 			looped = loopTimes == LOOP_CONTINUOUSLY;
 		}
 		else
@@ -248,7 +250,7 @@ public class Sequence
 	{
 		if (index >= frames.length)
 		{
-			if (looped || --loop > 0)
+			if (looped || --loopCounter > 0)
 				index = 0;
 			else
 			{
@@ -263,6 +265,10 @@ public class Sequence
 	public void reset()
 	{
 		index = 0;
+		loopCounter = loop;
+		start = true;
+		pause = false;
+		end = false;
 	}
 	
 	public void update()
@@ -309,6 +315,7 @@ public class Sequence
   		Sequence clone = new Sequence("");
   		
   		clone.loop = loop;
+  		clone.loopCounter = loopCounter;
   		clone.looped = looped;
   		clone.pause = pause;
   		clone.end = end;
