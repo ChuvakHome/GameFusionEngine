@@ -248,9 +248,7 @@ public class Sequence
 	{
 		if (index >= frames.length)
 		{
-			--loop;
-      
-			if (loop > 0 || looped)
+			if (looped || --loop > 0)
 				index = 0;
 			else
 			{
@@ -269,7 +267,7 @@ public class Sequence
 	
 	public void update()
 	{
-		if (start && !pause)
+		if (start)
 		{	
 			++updateTime;
 			
@@ -311,6 +309,9 @@ public class Sequence
   		Sequence clone = new Sequence("");
   		
   		clone.loop = loop;
+  		clone.looped = looped;
+  		clone.pause = pause;
+  		clone.end = end;
   		clone.delay = delay;
   		clone.frames = frames.clone();
   		
@@ -361,6 +362,7 @@ public class Sequence
   		updateTime = 0;
   		
   		start = false;
+  		looped = false;
   		pause = false;
   		end = false;
   	}
