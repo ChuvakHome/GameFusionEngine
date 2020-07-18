@@ -246,11 +246,10 @@ public class Sequence
 		{
 			--loop;
       
-			if (loop != 0)
+			if (loop > 0)
 				index = 0;
 			else
 			{
-				
 				index = frames.length - 1;
 				stop();
 			}
@@ -266,7 +265,7 @@ public class Sequence
 	
 	public void update()
 	{
-		if (start)
+		if (start && !pause)
 		{	
 			++updateTime;
 			
