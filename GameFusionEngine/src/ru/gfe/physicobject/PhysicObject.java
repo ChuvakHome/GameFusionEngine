@@ -29,7 +29,22 @@ public class PhysicObject implements IPhysicObject
 	
 	protected Level level;
 	
+	private String name;
+	
 	private boolean active;
+	
+	public PhysicObject(JLabel body, Sequence primarySequence, int posX, int posY, String name)
+	{
+		this.body = body;
+		this.primarySequence = primarySequence;
+		this.posX = posY;
+		this.posY = posY;
+		this.name = name;
+		
+		active = true;
+		
+		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
+	}
 	
 	public PhysicObject(JLabel body, Sequence primarySequence, int posX, int posY)
 	{
@@ -37,6 +52,18 @@ public class PhysicObject implements IPhysicObject
 		this.primarySequence = primarySequence;
 		this.posX = posY;
 		this.posY = posY;
+		
+		active = true;
+		
+		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
+	}
+	
+	public PhysicObject(JLabel body, int posX, int posY, String name)
+	{
+		this.body = body;
+		this.posX = posY;
+		this.posY = posY;
+		this.name = name;
 		
 		active = true;
 		
@@ -67,9 +94,19 @@ public class PhysicObject implements IPhysicObject
 			return null;
 	}
 	
+	public PhysicObject(JLabel body, Sequence primarySequence, String name)
+	{
+		this(body, primarySequence, body.getX(), body.getY(), name);
+	}
+	
 	public PhysicObject(JLabel body, Sequence primarySequence)
 	{
 		this(body, primarySequence, body.getX(), body.getY());
+	}
+	
+	public PhysicObject(JLabel body, String name)
+	{
+		this(body, body.getX(), body.getY(), name);
 	}
 	
 	public PhysicObject(JLabel body)
@@ -479,6 +516,17 @@ public class PhysicObject implements IPhysicObject
 	public boolean isActive() 
 	{
 		return active;
+	}
+	
+	public void setName(String s)
+	{
+		if (s != null && (name == null || !s.equals(name)))
+			name = s;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public void processCollision(IPhysicObject iGameObject) {}

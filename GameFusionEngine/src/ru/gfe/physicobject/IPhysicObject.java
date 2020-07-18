@@ -33,4 +33,8 @@ public interface IPhysicObject
 	public boolean isActive();
 	
 	public void processCollision(IPhysicObject iGameObject);
+	
+	public void setName(String name);
+	
+	public String getName();
 }
