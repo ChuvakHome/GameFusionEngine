@@ -37,4 +37,8 @@ public interface IPhysicObject
 	public void setName(String name);
 	
 	public String getName();
+	
+	public void setVisible(boolean flag);
+	
+	public boolean isVisible();
 }

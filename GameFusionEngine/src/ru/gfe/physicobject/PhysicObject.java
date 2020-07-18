@@ -518,6 +518,17 @@ public class PhysicObject implements IPhysicObject
 		return active;
 	}
 	
+	public void setVisible(boolean visible)
+	{
+		if (body != null)
+			body.setVisible(visible);
+	}
+	
+	public boolean isVisible()
+	{
+		return body != null && body.isVisible();
+	}
+	
 	public void setName(String s)
 	{
 		if (s != null && (name == null || !s.equals(name)))
