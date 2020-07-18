@@ -182,7 +182,7 @@ public class Level
 	{
 		for (IPhysicObject object: iPhysicObjects)
 		{
-			if (object != null && object.getName().equals(s))
+			if (object != null && object.getName() != null && object.getName().equals(s))
 				return object;
 		}
 		
