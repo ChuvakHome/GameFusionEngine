@@ -213,6 +213,7 @@ public class Sequence
 		if (frames.length > 0)
 		{
 			start = true;
+			end = false;
 		
 			currentFrame = ResourceHandler.getImageIcon(frames[0]);
 			index++;
@@ -262,14 +263,17 @@ public class Sequence
   
 	private Image nextFrame()
 	{
-		if (index >= frames.length && !end)
+		if (index >= frames.length)
 		{
 			if (looped || --loopCounter > 0)
 				index = 0;
 			else
 			{
 				index = frames.length - 1;
-				physicObject.sequenceFinished(this);
+				
+				if (physicObject != null && !end)
+					physicObject.sequenceFinished(this);
+				
 				stop();
 			}
 		}
@@ -329,6 +333,8 @@ public class Sequence
   	{
   		Sequence clone = new Sequence("");
   		
+  		clone.name = name;
+  		clone.reverse = reverse;
   		clone.loop = loop;
   		clone.loopCounter = loopCounter;
   		clone.looped = looped;
@@ -336,6 +342,8 @@ public class Sequence
   		clone.end = end;
   		clone.delay = delay;
   		clone.frames = frames.clone();
+  		
+  		clone.physicObject = physicObject;
   		
   		return clone;
   	}
@@ -371,6 +379,8 @@ public class Sequence
   	public void destroy()
   	{
   		removeFrames();
+  		
+  		physicObject = null;
   		
   		frames = null;
   		currentFrame = null;
