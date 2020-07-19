@@ -125,6 +125,7 @@ public final class GameFusionEngine
 			
 			if (currentLevel != null)
 			{
+				currentLevel.inputEnabled = false;
 				currentLevel.canDestroyLevel = true;
 				currentLevel.destroy();
 			}
@@ -136,6 +137,8 @@ public final class GameFusionEngine
 			currentLevel.init();	
 			display.setContentPane(currentLevel.levelContainer);
 			currentLevel.postInit();
+			
+			currentLevel.inputEnabled = true;
 				
 			display.setVisible(true);
 			
@@ -210,6 +213,7 @@ public final class GameFusionEngine
 		if (primaryLevelName != null)
 		{
 			currentLevel = LevelCollection.getLevelByName(primaryLevelName);
+			currentLevel.inputEnabled = false; 
 			currentLevel.init();
 			display.setContentPane(currentLevel.getLevelContainer());
 		}
@@ -224,6 +228,8 @@ public final class GameFusionEngine
 		started = true;
 		updateLevel = true;
 		changingLevel = false;
+		
+		currentLevel.inputEnabled = true;
 		
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask()
