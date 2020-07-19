@@ -31,6 +31,8 @@ public class Level
 	
 	protected long timeOnLevel;
 	
+	protected boolean inputEnabled = true;
+	
 	public Container getLevelContainer()
 	{
 		return levelContainer;
@@ -39,6 +41,21 @@ public class Level
 	public boolean addGameObject(IPhysicObject iGameObject)
 	{
 		return addGameObject(iGameObject, true);
+	}
+	
+	public void enableInput()
+	{
+		inputEnabled = true;
+	}
+	
+	public void disableInput()
+	{
+		inputEnabled = false;
+	}
+	
+	public boolean inputEnabled()
+	{
+		return inputEnabled;
 	}
 	
 	public boolean addGameObject(IPhysicObject iGameObject, boolean setDefaultZOrder)

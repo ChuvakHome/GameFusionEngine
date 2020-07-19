@@ -74,7 +74,7 @@ public final class GameFusionEngine
 	{
 		if (keyHandler != null)
 			keyHandler.processKeyEvent(e);
-		if (currentLevel != null)
+		if (currentLevel != null && currentLevel.inputEnabled)
 			currentLevel.processKeyEvent(e);
 	}
 	
@@ -82,7 +82,7 @@ public final class GameFusionEngine
 	{
 		if (mouseHandler != null)
 			mouseHandler.processMouseEvent(e);
-		if (currentLevel != null)
+		if (currentLevel != null && currentLevel.inputEnabled)
 			currentLevel.processMouseEvent(e);
 	}
 	
@@ -90,7 +90,7 @@ public final class GameFusionEngine
 	{
 		if (mouseHandler != null)
 			mouseHandler.processMouseMotionEvent(e);
-		if (currentLevel != null)
+		if (currentLevel != null && currentLevel.inputEnabled)
 			currentLevel.processMouseMotionEvent(e);
 	}
 	
@@ -98,7 +98,7 @@ public final class GameFusionEngine
 	{
 		if (mouseHandler != null)
 			mouseHandler.processMouseWheelEvent(e);
-		if (currentLevel != null)
+		if (currentLevel != null && currentLevel.inputEnabled)
 			currentLevel.processMouseWheelEvent(e);
 	}
 	
