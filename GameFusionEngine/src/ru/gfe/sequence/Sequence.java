@@ -9,6 +9,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import ru.gfe.handler.ResourceHandler;
+import ru.gfe.physicobject.PhysicObject;
 
 public class Sequence
 {	
@@ -29,12 +30,25 @@ public class Sequence
 	private String name; 
 	
 	private Icon currentFrame;
+	
+	private PhysicObject physicObject;
   
 	public Sequence(String directory)
 	{
 		this(new File(directory));
 	}
   
+	public void setPhysicObject(PhysicObject o)
+	{
+		if (o != null && (physicObject == null || !physicObject.equals(o)))
+			physicObject = o;
+	}
+	
+	public PhysicObject getPhysicObject()
+	{
+		return physicObject;
+	}
+	
 	public void setSequenceName(String sequenceName)
 	{
 		name = sequenceName;
@@ -248,13 +262,14 @@ public class Sequence
   
 	private Image nextFrame()
 	{
-		if (index >= frames.length)
+		if (index >= frames.length && !end)
 		{
 			if (looped || --loopCounter > 0)
 				index = 0;
 			else
 			{
 				index = frames.length - 1;
+				physicObject.sequenceFinished(this);
 				stop();
 			}
 		}

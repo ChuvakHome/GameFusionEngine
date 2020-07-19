@@ -47,6 +47,9 @@ public class PhysicObject implements IPhysicObject
 		active = true;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
+		
+		if (this.primarySequence != null)
+			this.primarySequence.setPhysicObject(this);
 	}
 	
 	public PhysicObject(JLabel body, Sequence primarySequence, int posX, int posY)
@@ -59,6 +62,9 @@ public class PhysicObject implements IPhysicObject
 		active = true;
 		
 		sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
+		
+		if (this.primarySequence != null)
+			this.primarySequence.setPhysicObject(this);
 	}
 	
 	public PhysicObject(JLabel body, int posX, int posY, String name)
@@ -166,8 +172,16 @@ public class PhysicObject implements IPhysicObject
 		
 		if (sequence != null)
 		{
-			if ((sequences[index] != null && !sequences[index].equals(sequence) && replace) || sequences[index] == null)
+			if (index == -1 && (primarySequence != null && replace || primarySequence == null))
+			{
+				primarySequence = sequence;
+				primarySequence.setPhysicObject(this);
+			}
+			else if ((sequences[index] != null && !sequences[index].equals(sequence) && replace) || sequences[index] == null)
+			{
 				sequences[index] = sequence;
+				sequences[index].setPhysicObject(this);
+			}
 		}
 	}
 
@@ -327,6 +341,9 @@ public class PhysicObject implements IPhysicObject
 	
 	public void update()
 	{
+		if (sequences == null)
+			sequences = new Sequence[SEQUENCE_ARRAY_SIZE];
+		
 		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE)
 		{
 			sequences[index].update();
@@ -350,16 +367,33 @@ public class PhysicObject implements IPhysicObject
 			body.setIcon(icon);
 			body.repaint();
 		}
+	}
+	
+	public void sequenceFinished(Sequence sequence)
+	{
+		if (sequenceHandler == null || sequence == null)
+			return;
 		
-		if (index >= 0 && index < SEQUENCE_ARRAY_SIZE)
+		if (primarySequence != null && sequence.equals(primarySequence))
+			sequenceHandler.onSequenceEnd(this, primarySequence, index);
+		else
 		{
-			if (sequences[index] != null && sequenceHandler != null && sequences[index].framesSequenceEnd())
+			if (sequences[index] != null && sequences[index].equals(sequence))
 				sequenceHandler.onSequenceEnd(this, sequences[index], index);
-		}
-		else if (index == -1)
-		{
-			if (primarySequence != null && sequenceHandler != null && primarySequence.framesSequenceEnd())
-				sequenceHandler.onSequenceEnd(this, primarySequence, index);
+			else
+			{
+				int i = 0;
+				
+				for (i = 0; i < SEQUENCE_ARRAY_SIZE; ++i)
+				{
+					if (sequences[i] != null && sequences[i].equals(sequence))
+					{
+						sequenceHandler.onSequenceEnd(this, sequences[i], i);
+						i = 0;
+						return;
+					}
+				}
+			}
 		}
 	}
 	
