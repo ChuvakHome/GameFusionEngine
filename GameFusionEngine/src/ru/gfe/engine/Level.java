@@ -77,6 +77,36 @@ public class Level
 			return false;
 	}
 	
+	public boolean addGameObject(IPhysicObject iGameObject, int zOrder)
+	{
+		if (freeId >= 0 && freeId < IENTITIES_ARRAY_SIZE && iGameObject != null && iGameObject.getLevel() == null && zOrder >= 0)
+		{
+			iPhysicObjects[freeId] = iGameObject;
+					
+			levelContainer.add(iPhysicObjects[freeId].getVisual());
+				
+			levelContainer.setComponentZOrder(iPhysicObjects[freeId].getVisual(), zOrder);
+				
+			iGameObject.setLevel(this, freeId++);
+				
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public void setObjectZOrder(IPhysicObject iPhysicObject, int zOrder)
+	{
+		if (iPhysicObject != null && iPhysicObject.getLevel() != null && iPhysicObject.getLevel().equals(this) && zOrder >= 0)
+			levelContainer.setComponentZOrder(iPhysicObject.getVisual(), zOrder);
+	}
+	
+	public void setDefaultZOrder(IPhysicObject iPhysicObject)
+	{
+		if (iPhysicObject != null && iPhysicObject.getLevel() != null && iPhysicObject.getLevel().equals(this))
+			levelContainer.setComponentZOrder(iPhysicObject.getVisual(), zOrder);
+	}
+	
 	public boolean checkStack()
 	{
 		return actionStack.size() < IACTIONS_STACK_SIZE;
