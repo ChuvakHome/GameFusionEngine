@@ -2,6 +2,7 @@ package ru.gfe.engine;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -134,11 +135,14 @@ public final class GameFusionEngine
 			
 			display.setVisible(false);
 				
-			currentLevel.init();	
-			display.setContentPane(currentLevel.levelContainer);
-			currentLevel.postInit();
-			
-			currentLevel.inputEnabled = true;
+			EventQueue.invokeLater(() ->
+			{
+				currentLevel.init();	
+				display.setContentPane(currentLevel.levelContainer);
+				currentLevel.postInit();
+				
+				currentLevel.inputEnabled = true;
+			});
 				
 			display.setVisible(true);
 			

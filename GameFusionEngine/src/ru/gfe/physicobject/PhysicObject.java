@@ -259,7 +259,10 @@ public class PhysicObject implements IPhysicObject
 	public void setPrimarySequence(Sequence primarySequence)
 	{
 		if (primarySequence != null && (this.primarySequence == null || !this.primarySequence.equals(primarySequence)))
+		{
 			this.primarySequence = primarySequence;
+			this.primarySequence.setPhysicObject(this);
+		}
 	}
 	
 	public void startSequence(int index)
