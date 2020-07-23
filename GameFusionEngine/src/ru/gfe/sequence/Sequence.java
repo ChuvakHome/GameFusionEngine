@@ -313,7 +313,7 @@ public class Sequence
 	
   	private static Image[] getImages(File directory)
   	{
-  		if (directory.isDirectory())
+  		if (directory != null && directory.isDirectory())
   		{
   			ArrayList<Image> imgs = new ArrayList();
       

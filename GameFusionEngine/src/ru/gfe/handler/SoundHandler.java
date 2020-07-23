@@ -161,7 +161,7 @@ public final class SoundHandler
 				{
 					for (AudioClip audioClip: audioClips)
 					{
-						if (audioClip != null && audioClip.getSource().equals(url.toString()))
+						if (audioClip != null && audioClip.getSource().equals(url.toURI().toString()))
 							return audioClip.isPlaying();
 					}
 				}

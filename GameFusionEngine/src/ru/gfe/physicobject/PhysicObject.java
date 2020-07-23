@@ -339,6 +339,11 @@ public class PhysicObject implements IPhysicObject
 		}
 	}
 	
+	public boolean hasSequence(int index)
+	{
+		return index == -1 || index >= 0 && index < SEQUENCE_ARRAY_SIZE ? sequences[index] != null : false;
+	}
+	
 	public void update()
 	{
 		if (sequences == null)
